@@ -1,0 +1,54 @@
+<application>
+  <component name="PropertiesComponent">
+    <property name="CommitChangeListDialog.DETAILS_SPLITTER_PROPORTION_2" value="0.7851124" />
+    <property name="CommitChangeListDialog.SPLITTER_PROPORTION_2" value="0.74709976" />
+    <property name="CommittedChanges.SplitterProportions.0" value="700" />
+    <property name="CommittedChanges.SplitterProportions.1" value="500" />
+    <property name="Copy.OpenInEditor" value="true" />
+    <property name="DBE.Default.Dialect" value="MySQL" />
+    <property name="ExpandBeforeRunStepsPanel" value="true" />
+    <property name="ExpandRunDashboardTypesPanel" value="false" />
+    <property name="PACKAGE_FILTER" value="mysql&#10;pymysql&#10;mysql-conn&#10;geocoder&#10;sys" />
+    <property name="PyCharm.InitialConfiguration" value="true" />
+    <property name="PyCharm.InitialConfiguration.V2" value="true" />
+    <property name="PyCharm.InitialConfiguration.V3" value="true" />
+    <property name="PyCharm.InitialConfiguration.V4" value="true" />
+    <property name="PyCharm.InitialConfiguration.V5" value="true" />
+    <property name="PyCharm.InitialConfiguration.V6" value="true" />
+    <property name="PyCharm.InitialConfiguration.V7" value="true" />
+    <property name="PyCharm.initialConfigurationShown" value="true" />
+    <property name="PythonUnitTestRunner.Splitter.Proportion" value="0.25093353" />
+    <property name="PythonUnitTestRunnerSupport.hideIgnoredTests" value="false" />
+    <property name="PythonUnitTestRunnerSupport.hidePassedTests" value="false" />
+    <property name="SplitFileEditor.Proportion" value="0.6904474" />
+    <property name="evlsprt3.183" value="11" />
+    <property name="file.gist.reindex.count" value="21909" />
+    <property name="fileTypeChangedCounter" value="2" />
+    <property name="lastTip" value="41" />
+    <property name="python.app.engine.sdk.path" value="" />
+    <property name="ts.lib.d.ts.version" value="3.2.1" />
+  </component>
+  <component name="PyTestFrameworkService">
+    <option name="SDK_TO_PYTEST">
+      <map>
+        <entry key="$USER_HOME$/Desktop/team21/pycharm/venv/bin/python" value="false" />
+        <entry key="$USER_HOME$/venv/bin/python" value="false" />
+        <entry key="/usr/bin/python2.7" value="false" />
+      </map>
+    </option>
+    <option name="SDK_TO_NOSETEST">
+      <map>
+        <entry key="$USER_HOME$/Desktop/team21/pycharm/venv/bin/python" value="false" />
+        <entry key="$USER_HOME$/venv/bin/python" value="false" />
+        <entry key="/usr/bin/python2.7" value="false" />
+      </map>
+    </option>
+    <option name="SDK_TO_TRIALTEST">
+      <map>
+        <entry key="$USER_HOME$/Desktop/team21/pycharm/venv/bin/python" value="false" />
+        <entry key="$USER_HOME$/venv/bin/python" value="false" />
+        <entry key="/usr/bin/python2.7" value="false" />
+      </map>
+    </option>
+  </component>
+</application>
