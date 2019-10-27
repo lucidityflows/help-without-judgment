@@ -17,4 +17,4 @@
 	- Do: python3 manage.py runserver 
 - All done!
 
-*When you want to check your changes locally repeat 'python3 manage.py migrate' and then 'python3 manage.py runserver'
+*When you make changes to models or the database, 'python3 manage.py migrate', and then 'python3 manage.py runserver'
