@@ -1,0 +1,247 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Help Without Judgment - Individual Dashboard</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+	<style>
+		.container
+		{
+			font-family: 'Helvetica','Arial', sans-serif;
+		}
+
+		.body
+		{
+			font-family: 'Helvetica','Arial', sans-serif;
+		}
+
+	</style>
+
+	<!--Navbar Starts Here -->
+	<nav class="mb-1 navbar navbar-expand-lg navbar-dark secondary-color lighten-1">
+	  <a class="navbar-brand" href="#">Help Without Judgment</a>
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-555"
+		aria-controls="navbarSupportedContent-555" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	  </button>
+	  <div class="collapse navbar-collapse" id="navbarSupportedContent-555">
+		<ul class="navbar-nav mr-auto">
+		  <li class="nav-item active">
+			<a class="nav-link" href="#">Home
+			  <span class="sr-only">(current)</span>
+			</a>
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link" href="#">Create Request</a>
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link" href="#">View Requests</a>
+		  </li>
+		  <li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-555" data-toggle="dropdown"
+			  aria-haspopup="true" aria-expanded="false">More
+			</a>
+			<div class="dropdown-menu dropdown-secondary" aria-labelledby="navbarDropdownMenuLink-555">
+			  <a class="dropdown-item" href="#">Create an Event</a>
+			  <a class="dropdown-item" href="#">View Past Requests</a>
+			  <a class="dropdown-item" href="#">Report a Problem</a>
+			</div>
+		  </li>
+		</ul>
+		<ul class="navbar-nav ml-auto nav-flex-icons">
+		  <li class="nav-item">
+			<a class="nav-link waves-effect waves-light">1
+			  <i class="fas fa-envelope"></i>
+			</a>
+		  </li>
+		  <li class="nav-item avatar dropdown">
+			<a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-55" data-toggle="dropdown"
+			  aria-haspopup="true" aria-expanded="false">
+			  <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-2.jpg" class="rounded-circle z-depth-0"
+				alt="avatar image">
+			</a>
+			<div class="dropdown-menu dropdown-menu-lg-right dropdown-secondary"
+			  aria-labelledby="navbarDropdownMenuLink-55">
+			  <a class="dropdown-item" href="#">Update Profile</a>
+			  <a class="dropdown-item" href="#">Update Username/Passowrd</a>
+			  <a class="dropdown-item" href="#">Log Out</a>
+			</div>
+		  </li>
+		</ul>
+	  </div>
+	</nav><!--/.Navbar -->
+
+</head>
+
+<body style="background-color: #42A1C9;">
+	<!-- Dashboard (jumbotron) Begins -->
+	<div style="background-color: #F9F8F8;" class="jumbotron d-flex align-items center min-vh-100" id="dashboard_greeting">
+    	<!-- Dashboard greeting container Begins -->
+		<div class="container text-center" id="jumbotron_text_container">
+			<h1 class="display-4" align="center">Dashboard</h1>
+
+            {% if user.is_authenticated %}
+             <h2> Welcome back {{ user.username }}</h2>
+
+            {% else %}
+             <h2> You are not logged in!</h2>
+            {% endif %}
+
+            <hr class="my-4">
+<!-- Thumbnails Begin Here -->
+			<div class="row">
+				<div class="col-sm-4 col-md-r">
+					<div class="thumbnail">
+						<img style="border: 2px solid black;" class="card-img" src="../static/registration/images/clothing_request_default_image.jpg" alt="clothing_request_default_image.jpg">
+						<div class="caption">
+							<h3>Status: Incomplete</h3>
+							<p>Description: 2 pairs of toddler pants. Size 2T.</p>
+							<p>Item Condition: Any condition</p>
+							<p>Date Accepted: 10/11/19</p>
+							<p>Request Appointment: </p>
+							<p>Date Completed: </p>
+							<p>Next Step: Schedule Request Appointment</p>
+							<p><a href="#" class="btn btn-primary" role="button">Message</a><a href="#" class="btn btn-success" role="button">Details</a><a href="#" class="btn btn-warning" role="button">Cancel</a><a href="#" class="btn btn-danger" role="button">Report</a></p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-sm-4 col-md-r">
+					<div class="thumbnail">
+						<img style="border: 2px solid black;" class="card-img" src="../static/registration/images/furniture_request_default_image.jpg" alt="clothing_request_default_image.jpg">
+						<div class="caption">
+							<h3>Status: Scheduled</h3>
+							<p>Description: A couch that can sit 3 people.</p>
+							<p>Item Condition: Any condition.</p>
+							<p>Date Accepted: 10/12/19</p>
+							<p>Request Appointment: 10/20/19 @ 10:00am</p>
+							<p>Date Completed: </p>
+							<p>Next Step: Meet for appointment</p>
+							<p><a href="#" class="btn btn-primary" role="button">Message</a><a href="#" class="btn btn-success" role="button">Details</a><a href="#" class="btn btn-warning" role="button">Cancel</a><a href="#" class="btn btn-danger" role="button">Report</a></p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-sm-4 col-md-r">
+					<div class="thumbnail">
+						<img style="border: 2px solid black;" class="card-img" src="../static/registration/images/translator_request_default_image.png" alt="clothing_request_default_image.jpg">
+						<div class="caption">
+							<h3>Status: Complete</h3>
+							<p>Description: Spanish-English speaker to help interpret a cell phone purchase from Sprint.</p>
+							<p>Date Accepted: 10/11/19</p>
+							<p>Request Appointment: 10/12/19 @ 2:00pm</p>
+							<p>Date Completed: 10/13/19</p>
+							<p>Next Step: None</p>
+							<p><a href="#" class="btn btn-primary" role="button">Message</a><a href="#" class="btn btn-success" role="button">Details</a><a href="#" class="btn btn-warning" role="button">Cancel</a><a href="#" class="btn btn-danger" role="button">Report</a></p>
+						</div>
+					</div>
+				</div>
+
+			</div> <!-- End of row -->
+
+			<div class="row">
+				<div class="col-sm-4 col-md-r">
+					<div class="thumbnail">
+						<img style="border: 2px solid black;" class="card-img" src="../static/registration/images/clothing_request_default_image.jpg" alt="clothing_request_default_image.jpg">
+						<div class="caption">
+							<h3>Status: Incomplete</h3>
+							<p>Description: 2 pairs of toddler pants. Size 2T.</p>
+							<p>Item Condition: Any condition</p>
+							<p>Date Accepted: 10/11/19</p>
+							<p>Request Appointment: </p>
+							<p>Date Completed: </p>
+							<p>Next Step: Schedule Request Appointment</p>
+							<p><a href="#" class="btn btn-primary" role="button">Message</a><a href="#" class="btn btn-success" role="button">Details</a><a href="#" class="btn btn-warning" role="button">Cancel</a><a href="#" class="btn btn-danger" role="button">Report</a></p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-sm-4 col-md-r">
+					<div class="thumbnail">
+						<img style="border: 2px solid black;" class="card-img" src="../static/registration/images/furniture_request_default_image.jpg" alt="clothing_request_default_image.jpg">
+						<div class="caption">
+							<h3>Status: Scheduled</h3>
+							<p>Description: A couch that can sit 3 people.</p>
+							<p>Item Condition: Any condition.</p>
+							<p>Date Accepted: 10/12/19</p>
+							<p>Request Appointment: 10/20/19 @ 10:00am</p>
+							<p>Date Completed: </p>
+							<p>Next Step: Meet for appointment</p>
+							<p><a href="#" class="btn btn-primary" role="button">Message</a><a href="#" class="btn btn-success" role="button">Details</a><a href="#" class="btn btn-warning" role="button">Cancel</a><a href="#" class="btn btn-danger" role="button">Report</a></p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-sm-4 col-md-r">
+					<div class="thumbnail">
+						<img style="border: 2px solid black;" class="card-img" src="../static/registration/images/translator_request_default_image.png" alt="clothing_request_default_image.jpg">
+						<div class="caption">
+							<h3>Status: Complete</h3>
+							<p>Description: Spanish-English speaker to help interpret a cell phone purchase from Sprint.</p>
+							<p>Date Accepted: 10/11/19</p>
+							<p>Request Appointment: 10/12/19 @ 2:00pm</p>
+							<p>Date Completed: 10/13/19</p>
+							<p>Next Step: None</p>
+							<p><a href="#" class="btn btn-primary" role="button">Message</a><a href="#" class="btn btn-success" role="button">Details</a><a href="#" class="btn btn-warning" role="button">Cancel</a><a href="#" class="btn btn-danger" role="button">Report</a></p>
+						</div>
+					</div>
+				</div>
+
+			</div> <!-- End of row -->
+		</div> <!-- End of jumbotron_text_container -->
+	</div> <!-- End of dashboard_greeting -->
+</body>
+
+<!-- Footer Begins Here-->
+<footer class="page-footer font-small teal pt-4">
+
+  <!-- Container Starts Here-->
+  <div class="container-fluid text-center text-md-left">
+
+    <!-- Grid Row Starts Here-->
+    <div class="row">
+
+      <!-- Grid Column Starts Here-->
+      <div class="col-md-6 mt-md-0 mt-3">
+
+        <!-- Content -->
+        <h5 class="text-uppercase font-weight-bold">About</h5>
+        <p>Help Without Judgment was conceived to make two things easier: providing direct help to local
+			communities and receiving help without giving up your privacy. In this age of technology and
+			connectivity, we hope you will can find it in your heart to make a difference by in the life
+			of someone in your community.</p>
+
+      </div> <!-- End of Grid Column -->
+
+      <hr class="clearfix w-100 d-md-none pb-3">
+
+      <!-- Grid Column Starts Here-->
+      <div class="col-md-6 mb-md-0 mb-3">
+
+        <!-- Content -->
+        <h5 class="text-uppercase font-weight-bold">Advice</h5>
+        <p>Although we are delighted that you are choosing to participate in this project, we want to remind you to
+		   never put yourself in a situation that makes you uncomfortable, and to meet in public places when possible.
+		   Your personal safety, the safety of your family, or anyone you care about is not worth being at risk. When
+		   in doubt, err on the side of caution or meet outside of a local police department to ensure your safety.</p>
+      </div> <!-- End of Grid Column -->
+    </div> <!-- End of Grid Row -->
+  </div> <!-- End of Container -->
+
+  <!-- Copyright Starts Here-->
+  <div class="footer-copyright text-center py-3">© 2019 Copyright:
+    <a href="https://google.com"> Help Without Judgment </a>
+  </div> <!-- End of Copyright -->
+
+</footer> <!-- End of Footer -->
+
+</html>
+
+
+</body>
+</html>

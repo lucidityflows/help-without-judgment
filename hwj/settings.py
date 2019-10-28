@@ -33,6 +33,8 @@ ALLOWED_HOSTS = ['.helpwithoutjudgment.ga', '159.203.72.81', 'wwww.helpwithoutju
 # Application definition
 
 INSTALLED_APPS = [
+
+    'user',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -117,9 +119,15 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
+# static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
+# For now we are assuming only individual users logging in.
+# Later this needs to accomodate potential organizations or
+# have a separate organization login
+
+# Send to index upon successful login
+LOGIN_REDIRECT_URL = '/'
