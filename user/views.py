@@ -1,10 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 
 # Create your views here.
 
 
+
+
+@login_required(login_url='/accounts/login/')
 def index(request):
 
     return render(request, 'user/index.html')
@@ -28,8 +33,13 @@ def register(request):
     else:
 
         form = UserCreationForm()
+
     context = {'form' : form}
 
     return render(request, 'registration/register.html', context)
 
 
+def logout(request):
+
+    logout(request)
+    return redirect('/accounts/login')

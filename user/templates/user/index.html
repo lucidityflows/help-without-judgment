@@ -68,8 +68,8 @@
 			<div class="dropdown-menu dropdown-menu-lg-right dropdown-secondary"
 			  aria-labelledby="navbarDropdownMenuLink-55">
 			  <a class="dropdown-item" href="#">Update Profile</a>
-			  <a class="dropdown-item" href="#">Update Username/Passowrd</a>
-			  <a class="dropdown-item" href="#">Log Out</a>
+			  <a class="dropdown-item" href="#">Update Username/Password</a>
+			  <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
 			</div>
 		  </li>
 		</ul>
@@ -79,6 +79,9 @@
 </head>
 
 <body style="background-color: #42A1C9;">
+
+
+
 	<!-- Dashboard (jumbotron) Begins -->
 	<div style="background-color: #F9F8F8;" class="jumbotron d-flex align-items center min-vh-100" id="dashboard_greeting">
     	<!-- Dashboard greeting container Begins -->
