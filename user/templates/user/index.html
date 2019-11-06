@@ -32,11 +32,38 @@
                         <p><strong>Requested By: </strong>{{ request.requester }}</p>
                         <p><strong>Description: </strong>{{ request.description }}</p>
                         <p><strong>Created On: </strong>{{ request.date_created|date:"F d, Y" }}</p>
+                        <p><strong>Accepted By: {{ request.accepter }}</strong></p>
                         <p><strong>Request Appointment: </strong>{{ request.date_appointment }}</p>
                         <p><strong>Completed On: </strong>{{ request.date_completed }}</p>
+
+                        {% block cancel_request %}
+                            {% if request.requester != user.username and request.accepter == user.username %}
+                                <div class="empty-form">
+                                    <form action= "{% url 'index' %}" method="POST" class="form" id="cancel">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="primary_key" value="{{ request.pk }}">
+                                        <input type="hidden" name="button" value="cancel">
+                                        <button type="submit" class="btn btn-warning">Cancel</button>
+                                    </form>
+                                </div>
+                            {% endif %}
+                        {% endblock cancel_request %}
+
+                        {% block delete_request %}
+                            {% if request.requester == user %}
+                                <div class="empty-form">
+                                    <form action= "{% url 'index' %}" method="POST" class="form" id="delete">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="primary_key" value="{{ request.pk }}">
+                                        <input type="hidden" name="button" value="delete">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                            {% endif %}
+                        {% endblock delete_request %}
                     </div>
                 </div>
             </div>
         {% endfor %}
-        </div>
+    </div>
 {% endblock content %}
