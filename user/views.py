@@ -4,8 +4,9 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from .models import Requests
-from .models import RequestForm
+from .models import RequestForm, AcceptRequestForm, CancelRequestForm, CloseRequestForm, DeleteRequestForm
 from django.http import HttpResponseRedirect
+from itertools import chain
 
 # Create your views here.
 
@@ -13,10 +14,48 @@ from django.http import HttpResponseRedirect
 @login_required(login_url='/accounts/login/')
 def index(request):
 
-    user = request.user
-    context = {'requests': Requests.objects.filter(requester=user)}
+    if request.method == "POST":
 
-    return render(request, 'user/index.html', context)
+        if request.POST['button'] == "cancel":
+
+            form = CancelRequestForm(request.POST)
+
+            user = request.user
+            primary_key = form.data["primary_key"]
+            primary_key = int(primary_key)
+            form.accepter = user
+
+            current_request = Requests.objects.get(pk=primary_key)
+            current_request.accepter = None
+            current_request.status = "Incomplete"
+            current_request.save()
+
+        if request.POST['button'] == "delete":
+
+            form = DeleteRequestForm(request.POST)
+
+            user = request.user
+            primary_key = form.data["primary_key"]
+            primary_key = int(primary_key)
+            form.requester = user
+
+            current_request = Requests.objects.filter(pk=primary_key)
+            current_request.delete()
+
+        return HttpResponseRedirect('/')
+
+
+
+    else:
+
+        user = request.user
+        created_query_list = Requests.objects.filter(requester=user)
+        accepted_query_list = Requests.objects.filter(accepter=user)
+
+        context = created_query_list | accepted_query_list
+        context = {'requests': context}
+
+        return render(request, 'user/index.html', context)
 
 
 def register(request):
@@ -51,11 +90,31 @@ def logout(request):
 
 def open_requests(request):
 
-    user = request.user
+    if request.method == "GET":
 
-    context = {'requests': Requests.objects.all().exclude(requester=user)}
+        user = request.user
 
-    return render(request, 'user/open_requests.html', context)
+        context = Requests.objects.all().exclude(requester=user).filter(accepter=None)
+        context = {'requests': context}
+
+        #context = {'requests': Requests.objects.all().exclude(requester=user)}
+
+        return render(request, 'user/open_requests.html', context)
+
+    if request.method == "POST":
+
+        form = AcceptRequestForm(request.POST)
+
+        user = request.user
+        primary_key = form.data["primary_key"]
+        primary_key = int(primary_key)
+        form.accepter = user
+
+        current_request = Requests.objects.get(pk=primary_key)
+        current_request.accepter = str(user)
+        current_request.save()
+
+        return HttpResponseRedirect('/')
 
 
 def create_request(request):
@@ -83,3 +142,4 @@ def create_request(request):
     context = {'form': form}
 
     return render(request, 'user/create_request.html', context)
+

@@ -23,6 +23,7 @@ class Requests(models.Model):
     date_appointment = models.DateTimeField(null=True)
     date_completed = models.DateTimeField(null=True)
     requester = models.ForeignKey(User, on_delete=models.CASCADE)
+    accepter = models.CharField(max_length=150, null=True)
 
     def __str__(self):
         return self.description
@@ -33,3 +34,32 @@ class RequestForm(ModelForm):
     class Meta:
         model = Requests
         fields = ['description', 'type']
+
+
+class AcceptRequestForm(ModelForm):
+
+    class Meta:
+        model = Requests
+        fields = ['accepter']
+
+
+class CancelRequestForm(ModelForm):
+
+    class Meta:
+        model = Requests
+        fields = ['accepter']
+
+
+class DeleteRequestForm(ModelForm):
+
+    class Meta:
+        model = Requests
+        fields = ['requester']
+
+
+class CloseRequestForm(ModelForm):
+
+    class Meta:
+        model = Requests
+        fields = ['status']
+

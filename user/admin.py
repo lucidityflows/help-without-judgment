@@ -3,3 +3,5 @@ from .models import Requests
 
 # Register your models here.
 admin.site.register(Requests)
+
+admin.site.site_header = "Help Without Judgment - Admin Dashboard"
