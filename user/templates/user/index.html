@@ -12,6 +12,7 @@
 {% block content %}
     <div class="row">
         {% for request in requests %}
+            {% if request.status != "Complete" %}
             <div class="col-sm-4 col-md-r">
                 <div class="thumbnail">
                     {% if request.type == 'Furniture Service' %}
@@ -33,8 +34,69 @@
                         <p><strong>Description: </strong>{{ request.description }}</p>
                         <p><strong>Created On: </strong>{{ request.date_created|date:"F d, Y" }}</p>
                         <p><strong>Accepted By: {{ request.accepter }}</strong></p>
-                        <p><strong>Request Appointment: </strong>{{ request.date_appointment }}</p>
-                        <p><strong>Completed On: </strong>{{ request.date_completed }}</p>
+
+                        {% if request.requester == user and request.appointment_confirmed == True %}
+                            <p><strong>Request Appointment: </strong>{{ request.date_appointment }} (Confirmed)</p>
+                            <form action= "{% url 'index' %}" method="POST" class="form" id="appointment">
+                                {% csrf_token %}
+                                    <input type="hidden" name="primary_key" value="{{ request.pk }}">
+                                    <input type="hidden" name="button" value="cancel_appointment">
+                                    <button type="submit" class="btn btn-info">Cancel Appointment</button>
+                            </form>
+
+                        {% elif request.accepter == user.username and request.appointment_suggested == True and request.appointment_confirmed == False %}
+                            <p><strong>Appointment Offer: </strong>{{ request.date_appointment }} (Awaiting Requester Confirmation)</p>
+                            <form action= "{% url 'index' %}" method="POST" class="form" id="appointment">
+                                {% csrf_token %}
+                                    <input type="hidden" name="primary_key" value="{{ request.pk }}">
+                                    <input type="hidden" name="button" value="cancel_appointment">
+                                    <button type="submit" class="btn btn-info">Cancel Appointment</button>
+                            </form>
+
+                        {% elif request.accepter == user.username and request.appointment_suggested == True and request.appointment_confirmed == True %}
+                            <p><strong>Request Appointment: </strong>{{ request.date_appointment }} (Confirmed)</p>
+                            <form action= "{% url 'index' %}" method="POST" class="form" id="appointment">
+                                {% csrf_token %}
+                                    <input type="hidden" name="primary_key" value="{{ request.pk }}">
+                                    <input type="hidden" name="button" value="cancel_appointment">
+                                    <button type="submit" class="btn btn-info">Cancel Appointment</button>
+                            </form>
+                        {% endif %}
+
+                        {% block set_appointment %}
+                            {% if request.requester != user.username and request.accepter == user.username and request.appointment_suggested == False %}
+                                <form action= "{% url 'index' %}" method="POST" class="form" id="appointment">
+                                    {% csrf_token %}
+                                    <label for="date_appointment">Schedule Appointment:</label>
+                                    <input size="15px" type="text" id="id_date" name="new_date" value="{{ form.date|default_if_none:''}}">
+                                    <input type="hidden" name="primary_key" value="{{ request.pk }}">
+                                    <input type="hidden" name="button" value="appointment">
+                                    <button type="submit" class="btn btn-info">Submit Appointment</button>
+                                </form>
+                            {% endif %}
+                        {% endblock set_appointment %}
+
+                        {% block confirm_appointment %}
+                            {% if request.requester == user and request.date_appointment != null and request.appointment_confirmed == False %}
+                                <p>{{ request.accepter }} has offered to complete your request at: {{ request.date_appointment }}</p>
+                                <p>Please confirm or reject this offer:</p>
+                                <span>
+                                <form action = "{% url 'index' %}" method="POST" class="form" id="confirm" style="display: inline-block;">
+                                {% csrf_token %}
+                                    <input type="hidden" name="primary_key" value="{{ request.pk }}">
+                                    <input type="hidden" name="button" id="agree_button" value="confirm_appointment">
+                                    <button type="submit" value="agree" class="btn btn-success">Agree</button>
+                                </form>
+                                <form action = "{% url 'index' %}" method="POST" class="form" id="confirm" style="display: inline-block;">
+                                {% csrf_token %}
+                                    <input type="hidden" name="primary_key" value="{{ request.pk }}">
+                                    <input type="hidden" name="button" id="reject_button" value="reject_appointment">
+                                    <button type="submit" value="reject" class="btn btn-warning">Reject</button>
+                                </form>
+
+                                </span>
+                            {% endif %}
+                        {% endblock confirm_appointment %}
 
                         {% block cancel_request %}
                             {% if request.requester != user.username and request.accepter == user.username %}
@@ -43,14 +105,14 @@
                                         {% csrf_token %}
                                         <input type="hidden" name="primary_key" value="{{ request.pk }}">
                                         <input type="hidden" name="button" value="cancel">
-                                        <button type="submit" class="btn btn-warning">Cancel</button>
+                                        <button type="submit" class="btn btn-warning">Give Back Request</button>
                                     </form>
                                 </div>
                             {% endif %}
                         {% endblock cancel_request %}
 
                         {% block delete_request %}
-                            {% if request.requester == user %}
+                            {% if request.requester == user and request.appointment_confirmed == False %}
                                 <div class="empty-form">
                                     <form action= "{% url 'index' %}" method="POST" class="form" id="delete">
                                         {% csrf_token %}
@@ -61,9 +123,23 @@
                                 </div>
                             {% endif %}
                         {% endblock delete_request %}
+
+                    {% block complete_request %}
+                    {% if request.requester == user and request.appointment_confirmed == True %}
+                        <form action= "{% url 'index' %}" method="POST" class="form" id="complete_appointment">
+                            {% csrf_token %}
+                            <input type="hidden" name="primary_key" value="{{ request.pk }}">
+                            <input type="hidden" name="button" value="complete_appointment">
+                            <button type="submit" class="btn btn-success">My Request Is Complete!</button>
+                        </form>
+                    {% endif %}
+                    {% endblock complete_request %}
+
                     </div>
                 </div>
             </div>
+            {% endif %}
         {% endfor %}
     </div>
 {% endblock content %}
+
