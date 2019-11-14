@@ -1,0 +1,45 @@
+{% extends "user/base.html" %}
+
+{% block pageheader %}View Open Requests{% endblock %}
+
+{% block content %}
+    <div class="row">
+        {% for request in requests %}
+            <div class="col-sm-4 col-md-r">
+                <div class="thumbnail">
+                    {% if request.type == 'Furniture Service' %}
+                    <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/furniture_request_default_image.jpg" alt="furniture_request_default_image.jpg">
+                    {% elif request.type == 'Food Service' %}
+                    <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/food_request_default_image.jpg" alt="food_request_default_image.jpg">
+                    {% elif request.type == 'Clothing Service' %}
+                    <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/clothing_request_default_image.jpg" alt="clothing_request_default_image.jpg">
+                    {% elif request.type == 'Interpreter Service' %}
+                    <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/interpreter_request_default_image.png" alt="interpreter_request_default_image.jpg">
+                    {% elif request.type == 'Transportation Service' %}
+                    <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/transportation_request_default_image.jpg" alt="transportation_request_default_image.jpg">
+                    {% endif %}
+                    <div class="caption">
+                        <h3><strong>Status: </strong>{{ request.status }}</h3>
+                        <p><strong>Type: </strong>{{ request.type }}</p>
+                        <p><strong>Requested By: </strong>{{ request.requester }}</p>
+                        <p><strong>Description: </strong>{{ request.description }}</p>
+                        <p><strong>Created On: </strong>{{ request.date_created|date:"F d, Y" }}</p>
+                        {% if request.date_appointment != null and request.appointment_confirmed == False %}
+                            <p><strong>Request Appointment: You have a pending schedule appointment.</strong></p>
+                        {% elif request.date_appointment != null and request.appointment_confirmed == True %}
+                            <p><strong>Request Appointment: </strong>{{ request.date_appointment }}</p>
+                        {% endif %}
+                        <p><strong>Completed On: </strong>{{ request.date_completed }}</p>
+                        <div class="empty-form">
+                            <form action= "{% url 'open_requests' %}" method="POST" class="form">
+                                {% csrf_token %}
+                                <input type="hidden" name="primary_key" value="{{ request.pk }}">
+                                <button type="submit" class="btn btn-success">Accept</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+{% endblock content %}

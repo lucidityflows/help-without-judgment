@@ -1,0 +1,166 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Help Without Judgment</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!-- Datepicker -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous">
+
+	<style>
+		.container
+		{
+			font-family: 'Helvetica','Arial', sans-serif;
+		}
+
+		.body
+		{
+			font-family: 'Helvetica','Arial', sans-serif;
+		}
+
+	</style>
+
+    <script>
+        $(function()
+        {
+            $("#id_date").datetimepicker();
+            format: 'YYYY-MM-DD HH:MM'
+        });
+    </script>
+</head>
+
+<body style="background-color: #42A1C9;">
+
+<!--Navbar Starts Here -->
+	<nav class="mb-1 navbar navbar-expand-lg navbar-dark secondary-color lighten-1">
+        <a class="navbar-brand" href="#">Help Without Judgment</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-555" aria-controls="navbarSupportedContent-555" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent-555">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'index' %}">Home
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'create_request' %}">Create Request</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'open_requests' %}">View Requests</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-555" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>
+                    <div class="dropdown-menu dropdown-secondary" aria-labelledby="navbarDropdownMenuLink-555">
+                        <a class="dropdown-item" href="#">Create an Event</a>
+                        <a class="dropdown-item" href="{% url 'past_requests' %}">View Past Requests</a>
+                        <a class="dropdown-item" href="#">Report a Problem</a>
+                    </div>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto nav-flex-icons">
+                <li class="nav-item">
+                    <a class="nav-link waves-effect waves-light">1
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                </li>
+                <li class="nav-item avatar dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-55" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-2.jpg" class="rounded-circle z-depth-0" alt="avatar image">
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg-right dropdown-secondary" aria-labelledby="navbarDropdownMenuLink-55">
+                        <a class="dropdown-item" href="#">Update Profile</a>
+                        <a class="dropdown-item" href="#">Update Username/Password</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!--/.Navbar -->
+
+	<!-- Dashboard (jumbotron) Begins -->
+	<div style="background-color: #F9F8F8;" class="jumbotron d-flex align-items center min-vh-100" id="dashboard_greeting">
+    	<!-- Dashboard greeting container Begins -->
+		<div class="container text-center" id="jumbotron_text_container">
+			<h1 class="display-4" align="center">{% block pageheader %}Dashboard{% endblock %}</h1>
+
+            {% block greeting %}
+            {% endblock greeting%}
+            <hr class="my-4">
+
+            {% block content %}
+            {% endblock content%}
+
+            {% block set_appointment %}
+            {% endblock set_appointment %}
+
+            {% block confirm_appointment %}
+            {% endblock confirm_appointment %}
+
+            {% block cancel_request %}
+            {% endblock cancel_request %}
+
+            {% block delete_request %}
+            {% endblock delete_request %}
+
+            {% block complete_request %}
+            {% endblock complete_request %}
+
+        </div><!-- End container -->
+    </div> <!-- End jumbotron -->
+
+    <!-- Footer Begins Here-->
+    <footer class="page-footer font-small teal pt-4">
+
+      <!-- Container Starts Here-->
+      <div class="container-fluid text-center text-md-left">
+
+        <!-- Grid Row Starts Here-->
+        <div class="row">
+
+          <!-- Grid Column Starts Here-->
+          <div class="col-md-6 mt-md-0 mt-3">
+
+            <!-- Content -->
+            <h5 class="text-uppercase font-weight-bold">About</h5>
+            <p>Help Without Judgment was conceived to make two things easier: providing direct help to local
+                communities and receiving help without giving up your privacy. In this age of technology and
+                connectivity, we hope you will find it in your heart to make a difference in the life
+                of someone in your community.</p>
+
+          </div> <!-- End of Grid Column -->
+
+          <hr class="clearfix w-100 d-md-none pb-3">
+
+          <!-- Grid Column Starts Here-->
+          <div class="col-md-6 mb-md-0 mb-3">
+
+            <!-- Content -->
+            <h5 class="text-uppercase font-weight-bold">Advice</h5>
+            <p>Although we are delighted that you are choosing to participate in this project, we want to remind you to
+               never put yourself in a situation that makes you uncomfortable, and to meet in public places when possible.
+               Your personal safety, the safety of your family, or anyone you care about is not worth being at risk. When
+               in doubt, err on the side of caution or meet outside of a local police department to ensure your safety.</p>
+          </div> <!-- End of Grid Column -->
+        </div> <!-- End of Grid Row -->
+      </div> <!-- End of Container -->
+
+      <!-- Copyright Starts Here-->
+      <div class="footer-copyright text-center py-3">© 2019 Copyright:
+        <a href="https://helpwithoutjudgment.ga"> Help Without Judgment </a>
+      </div> <!-- End of Copyright -->
+
+    </footer> <!-- End of Footer -->
+</body>
+</html>
