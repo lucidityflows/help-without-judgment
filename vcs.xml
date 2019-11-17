@@ -86,8 +86,12 @@
           <option name="url" value="https://rtorres5@bitbucket.org/seniorproject1/hwj.git" />
           <option name="userName" value="" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://rtorres5@bitbucket.org/Rallen6/hwj-messaging.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
       </list>
     </option>
-    <option name="cloneParentDir" value="$USER_HOME$/Desktop" />
+    <option name="cloneParentDir" value="$USER_HOME$/Library/Mobile Documents/com~apple~CloudDocs" />
   </component>
 </application>
