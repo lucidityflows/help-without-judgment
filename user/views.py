@@ -10,6 +10,8 @@ from django.http import HttpResponseRedirect
 from itertools import chain
 from datetime import datetime
 from django.utils import timezone
+from chat.models import Thread
+from django.contrib.auth.models import User
 
 # Create your views here.
 
@@ -18,6 +20,41 @@ from django.utils import timezone
 def index(request):
 
     if request.method == "POST":
+
+        if request.POST['button'] == "message_user":
+
+            user = request.user
+            primary_key = request.POST["primary_key"]
+            primary_key = int(primary_key)
+            current_request = Requests.objects.get(pk=primary_key)
+
+            if current_request.accepter == user.username:
+
+                other_user = current_request.requester
+                other_user = User.objects.get(username=other_user)
+
+            else:
+
+                other_user = current_request.accepter
+                other_user = User.objects.get(username=other_user)
+
+            potential_thread1 = Thread.objects.filter(first=user, second=other_user)
+            potential_thread2 = Thread.objects.filter(first=other_user, second=user)
+
+            if not potential_thread1 and not potential_thread2:
+
+                new_thread = Thread(first=user, second=other_user)
+                new_thread.save()
+
+                return_url = '/messages/' + str(other_user)
+
+                return HttpResponseRedirect(return_url)
+
+            else:
+
+                return_url = '/messages/' + str(other_user)
+
+                return HttpResponseRedirect(return_url)
 
         if request.POST['button'] == "complete_appointment":
             user = request.user

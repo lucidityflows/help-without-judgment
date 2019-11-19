@@ -1,0 +1,97 @@
+{% extends "user/base.html" %}
+
+<style>
+    .body
+    {
+        font-family: 'Helvetica','Arial', sans-serif;
+        background-color: #42A1C9
+    }
+    #chat-items ul
+    {
+        background-color: white;
+        max-height: 120px;/*The important part*/
+        overflow: scroll;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #chat-items li
+    {
+        list-style-type: none;
+    }
+</style>
+
+
+{% block content %}
+<h3 style="text-align: left;" >User: {% if user != object.first %}{{ object.first }}{% else %}{{ object.second }}{% endif %}</h3>
+<ul style="text-align: left;" id='chat-items'>
+{% for chat in object.chatmessage_set.all %}
+
+<li><b>{{ chat.user }}:</b> {{ chat.message }}</li>
+
+{% endfor %}
+</ul>
+
+<form style="text-align: left;" id='form' method='POST'> {% csrf_token %}
+{{form.as_p }}
+<input type='submit' class='btn btn-primary'/>
+</form>
+
+{% endblock %}
+
+{% block script %}
+<script>
+$(document).ready(function(){
+	//alert("jquery world")
+	var formData = $("#form")
+	var messageInput = $("#id_message")
+	var chatItems = $('#chat-items')
+	var loc = window.location
+	var wsStart = 'ws://'
+  	if (loc.protocol == 'https:') {
+  		wsStart = 'wss://'
+  	}
+  	//var webSocketEndpoint = wsStart + loc.host + '/chat/'
+  	console.log(loc.host)
+	var webSocketEndpoint = wsStart + loc.host + loc.pathname
+	console.log(webSocketEndpoint)
+	console.log(loc.pathname)
+	var socket = new WebSocket(webSocketEndpoint) //ReconnectingWebSocket
+
+	socket.onmessage = function(e){
+		console.log('message', e)
+		//alert(e.data)
+		var msgData = JSON.parse(e.data)
+		console.log(msgData)
+		chatItems.append(`<li><b>${msgData.user}:</b> ${msgData.msg}</li>`)
+   		chatItems.animate({scrollTop: chatItems.prop("scrollHeight")}, 500);
+	}
+
+	socket.onopen = function(e){
+		console.log('open', e)
+		formData.submit(function(event){
+			event.preventDefault()
+			var messageText = messageInput.val()
+			console.log(messageText)
+			var jsonData = JSON.stringify({msg: messageText, user:'jmitchel3'})
+			socket.send(jsonData)
+			formData[0].reset()
+		})
+	}
+
+	socket.onerror = function(e){
+		console.log('error', e)
+	}
+
+	socket.onclose = function(e){
+		console.log('closed', e)
+	}
+
+
+	if (socket.readyState == WebSocket.OPEN) {
+
+	} else if (socket.readyState == WebSocket.CONNECTING){
+		console.log("connecting..")
+	}
+})
+</script>
+{% endblock script%}

@@ -15,7 +15,7 @@
     <!-- Datepicker -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous">
-
+    <script type="text/javascript" src='http://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js'></script>
 	<style>
 		.container
 		{
@@ -26,6 +26,19 @@
 		{
 			font-family: 'Helvetica','Arial', sans-serif;
 		}
+
+        ul#chat-items
+		{
+ 			background-color: white;
+    		max-height:120px;/*The important part*/
+    		overflow:scroll;
+    		-webkit-overflow-scrolling:touch;
+ 		}
+
+        #chat-items li
+		{
+			list-style-type: none;
+    	}
 
 	</style>
 
@@ -98,6 +111,9 @@
             {% block greeting %}
             {% endblock greeting%}
             <hr class="my-4">
+
+            {% block script %}
+            {% endblock script%}
 
             {% block content %}
             {% endblock content%}
