@@ -30,10 +30,26 @@
                     <div class="caption">
                         <h3><strong>Status: </strong>{{ request.status }}</h3>
                         <p><strong>Type: </strong>{{ request.type }}</p>
-                        <p><strong>Requested By: </strong>{{ request.requester }}</p>
+                        <p><strong>Requested By: </strong>{{ request.requester }}
+                        {% if request.requester != user %}
+                            <form action= "{% url 'index' %}" method="POST" class="form" id="message">
+                                {% csrf_token %}
+                                    <input type="hidden" name="primary_key" value="{{ request.pk }}">
+                                    <input type="hidden" name="button" value="message_user">
+                                    <button type="submit" class="btn btn-info">Message User</button>
+                            </form>
+                        {% endif %} </p>
                         <p><strong>Description: </strong>{{ request.description }}</p>
                         <p><strong>Created On: </strong>{{ request.date_created|date:"F d, Y" }}</p>
-                        <p><strong>Accepted By: {{ request.accepter }}</strong></p>
+                        <p><strong>Accepted By: {{ request.accepter }}</strong>
+                        {% if request.accepter != none and request.accepter != user.username %}
+                            <form action= "{% url 'index' %}" method="POST" class="form" id="message">
+                                {% csrf_token %}
+                                    <input type="hidden" name="primary_key" value="{{ request.pk }}">
+                                    <input type="hidden" name="button" value="message_user">
+                                    <button type="submit" class="btn btn-info">Message User</button>
+                            </form>
+                        {% endif %} </p>
 
                         {% if request.requester == user and request.appointment_confirmed == True %}
                             <p><strong>Request Appointment: </strong>{{ request.date_appointment }} (Confirmed)</p>

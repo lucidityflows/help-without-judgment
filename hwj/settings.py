@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'chat',
+    'channels',
+
 ]
 
 MIDDLEWARE = [
@@ -73,6 +76,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'hwj.wsgi.application'
 
+ROOT_URLCONF = 'hwj.urls'
+ASGI_APPLICATION = 'hwj.routing.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
@@ -131,4 +136,14 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 # Send to index upon successful login
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
+            #"hosts": [os.environ.get(REDIS_URL', 'redis://localhost", 6379')]
+        },
+    },
+}
 
