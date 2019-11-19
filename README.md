@@ -12,9 +12,13 @@
 - Do: 'pip3 install --upgrade pip (you may have to do this a few times to get it updated
 - Do: 'pip3 install django'
 - Do: 'pip3 install mysqlclient'
+- Do: 'pip3 install channels'
+- Do: 'brew install redis' (you may have to download redis and install for real server)
+- Do: 'pip3 install pytz'
+
 - Go the folder with manage.py
 	- Do: python3 manage.py migrate (you will do this anytime you change anything)
-	- Do: python3 manage.py runserver 
+	- Do: python3 manage.py runserver
 - All done!
 
 *When you make changes to models or the database, 'python3 manage.py migrate', and then 'python3 manage.py runserver'
