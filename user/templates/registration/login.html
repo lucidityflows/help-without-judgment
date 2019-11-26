@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Help Without Judgment - Login Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+</head>
+
+<body style="background-color: #42A1C9;">
+	<div id="login">
+		<div id="logo" align="center">
+            <img src="../../static/registration/images/logo.png" height="150px" width="150px" alt="HWJ_logo.png">
+		</div>
+		<h3 id="title-banner" class="text-center text-white pt-5" >Help Without Judgment</h3>
+		<div id="main-wrapper" class="container" >
+			<div id="login-row" class="row justify-content-center align-items-center">
+				<div id="login-column" class="col-md-6">
+					<div id="login-box" class="col-md-12">
+
+                        {% if form.errors %}
+                            <p align="center"> There's something wrong with what you entered!</p>
+                        {% endif %}
+
+                        {% if next %}
+                        <p align="center">Please login to continue.</p>
+                        {% endif %}
+
+                        <form id="login-form" class="form" method="POST" action="{% url 'login' %}" >
+                            {% csrf_token %}
+                            <h3 class="text-center text-white" style="color: #795A63;">Login</h3>
+							<!-- Username -->
+					  		<div class="form-group" align="center">
+								<label for="username" class="text-white">Username:</label><br>
+                                {{ form.username }}
+                            </div>
+                            <!-- Password -->
+					  		<div class="form-group" align="center">
+								<label for="password" class="text-white">Password:</label><br>
+                            {{ form.password }}
+
+                                <!-- Remember me/Submit -->
+                            <div class="form-group" align="center">
+								<br><input type="submit" name="submit" class="btn btn-secondary btn-md" value="Submit">
+							</div>
+                            <input type="hidden" name="next" value=""{{ next }}>
+
+                            <!-- Register Link -->
+							<div id="register-link" class="text-right">
+								<a href="https://helpwithoutjudgment.ga/register"
+								   class="text-white">Register here</a>
+							</div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -20,6 +19,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# Put the secret key below here:
+SECRET_KEY = 'y(zrdj91=3sqam5mm#)9f2f9-i_dz-%wezg@rei&lnr*40ynom'
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -31,12 +32,17 @@ ALLOWED_HOSTS = ['.helpwithoutjudgment.ga', '159.203.72.81', 'wwww.helpwithoutju
 # Application definition
 
 INSTALLED_APPS = [
+
+    'user',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'chat',
+    'channels',
+
 ]
 
 MIDDLEWARE = [
@@ -70,6 +76,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'hwj.wsgi.application'
 
+ROOT_URLCONF = 'hwj.urls'
+ASGI_APPLICATION = 'hwj.routing.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
@@ -115,9 +123,27 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
+# static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+# For now we are assuming only individual users logging in.
+# Later this needs to accomodate potential organizations or
+# have a separate organization login
+
+# Send to index upon successful login
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
+            #"hosts": [os.environ.get(REDIS_URL', 'redis://localhost", 6379')]
+        },
+    },
+}
 

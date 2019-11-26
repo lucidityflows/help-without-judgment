@@ -1,0 +1,63 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Help Without Judgment - Registration Page</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+	<script src="js/FrontEndMethods.js"></script>
+	<style>
+		.container
+		{
+			font-family: 'Helvetica','Arial', sans-serif;
+		}
+
+		.body
+		{
+			font-family: 'Helvetica','Arial', sans-serif;
+		}
+
+        label {
+            color: #F9F8F8;
+        }
+
+	</style>
+</head>
+
+<body style="background-color: #42A1C9;">
+
+	<div id="register">
+		<div id="logo" align="center">
+  			<img src="../../static/registration/images/logo.png"  height="150x" width="150px" alt="HWJ_logo.png">
+		</div>
+		<h3 class="text-center text-white pt-5">Help Without Judgment</h3>
+		<div class="container">
+			<div id="login-row" class="row justify-content-center align-items-center">
+				<div id="login-column" class="col-md-6">
+					<div id="login-box" class="col-md-12">
+
+                        <form method="POST" action="{% url 'register' %}">
+                            {% csrf_token %}
+
+                            {% if form.errors %}
+                            <p align="center">There are errors in the form!</p>
+                            {% endif %}
+
+                            <h3 class="text-center text-white">Register</h3>
+                            {{ form }}
+                            <!-- Submit -->
+                            <div class="form-group" align="center">
+                                <br><input type="submit" name="submit" class="btn btn-secondary btn-md" value="Register">
+                            </div>
+                        </form>
+                    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
