@@ -11,6 +11,8 @@ from itertools import chain
 from datetime import datetime
 from django.utils import timezone
 from chat.models import Thread
+from django import forms
+
 from django.contrib.auth.models import User
 
 # Create your views here.
@@ -19,14 +21,30 @@ from django.contrib.auth.models import User
 @login_required(login_url='/accounts/login/')
 def index(request):
 
+    user = request.user
+
     if request.method == "POST":
 
-        if request.POST['button'] == "message_user":
+        primary_key = request.POST["primary_key"]
+        primary_key = int(primary_key)
+        current_request = Requests.objects.get(pk=primary_key)
 
-            user = request.user
-            primary_key = request.POST["primary_key"]
-            primary_key = int(primary_key)
-            current_request = Requests.objects.get(pk=primary_key)
+        if 'cancel' in request.POST:
+            current_request.date_appointment = None
+            current_request.appointment_confirmed = False
+            current_request.accepter = None
+            current_request.status = "Incomplete"
+            current_request.appointment_suggested = False
+            current_request.save()
+
+        if 'delete' in request.POST:
+            current_request.delete()
+
+        if 'report' in request.POST:
+            current_request.reported = True
+            current_request.save()
+
+        if 'message' in request.POST:
 
             if current_request.accepter == user.username:
 
@@ -56,123 +74,60 @@ def index(request):
 
                 return HttpResponseRedirect(return_url)
 
-        if request.POST['button'] == "complete_appointment":
-            user = request.user
-            primary_key = request.POST["primary_key"]
-            primary_key = int(primary_key)
-
-            current_request = Requests.objects.get(pk=primary_key)
-            current_request.status = "Complete"
-            current_request.date_completed = datetime.now()
-            current_request.save()
-
-        if request.POST['button'] == "cancel_appointment":
-
-            user = request.user
-            primary_key = request.POST["primary_key"]
-            primary_key = int(primary_key)
-
-            current_request = Requests.objects.get(pk=primary_key)
-            current_request.appointment_confirmed = False
-            current_request.date_appointment = None
-            current_request.status = "Accepted"
-            current_request.appointment_suggested = False
-            current_request.save()
-
-        if request.POST['button'] == "confirm_appointment" or request.POST['button'] == "reject_appointment":
-
-            form = ConfirmAppointmentForm()
-
-            if request.POST['button'] == "confirm_appointment":
-                button_choice = True
-
-            else:
-                button_choice = False
-
-            user = request.user
-            primary_key = request.POST["primary_key"]
-            primary_key = int(primary_key)
-
-            current_request = Requests.objects.get(pk=primary_key)
-
-            if button_choice == True:
-
-                current_request.appointment_confirmed = True
-                current_request.status = "Confirmed Appointment"
-
-            else:
-
-                current_request.appointment_confirmed = False
-                current_request.date_appointment = None
-                current_request.status = "Incomplete"
-                current_request.appointment_suggested = False
-
-            current_request.save()
-
-        if request.POST['button'] == "cancel":
-
-            form = CancelRequestForm(request.POST)
-
-            user = request.user
-            primary_key = form.data["primary_key"]
-            primary_key = int(primary_key)
-            form.accepter = user
-
-            current_request = Requests.objects.get(pk=primary_key)
-            current_request.date_appointment = None
-            current_request.appointment_confirmed = False
-            current_request.accepter = None
-            current_request.status = "Incomplete"
-            current_request.appointment_suggested = False
-            current_request.save()
-
-        if request.POST['button'] == "delete":
-
-            form = DeleteRequestForm(request.POST)
-
-            user = request.user
-            primary_key = form.data["primary_key"]
-            primary_key = int(primary_key)
-            form.requester = user
-
-            current_request = Requests.objects.filter(pk=primary_key)
-            current_request.delete()
-
-        if request.POST['button'] == "appointment":
+        if 'schedule' in request.POST:
 
             form = DateForm()
 
             if request.POST['new_date'] != '':
-
                 new_date = request.POST['new_date']
 
                 new_date = datetime.strptime(new_date, '%Y/%m/%d %H:%M').strftime('%Y-%m-%d %H:%M')
-                #new_date = new_date[0:4] + "-" + new_date[5:7] + "-" + new_date[8:]
-                user = request.user
-                primary_key = request.POST["primary_key"]
-                primary_key = int(primary_key)
-
-                current_request = Requests.objects.filter(pk=primary_key).first()
+                # new_date = new_date[0:4] + "-" + new_date[5:7] + "-" + new_date[8:]
                 current_request.date_appointment = new_date
                 current_request.appointment_suggested = True
                 current_request.status = "Appointment Not Yet Confirmed"
                 current_request.save()
 
+        if 'accept' in request.POST:
+
+            current_request.appointment_confirmed = True
+            current_request.status = "Confirmed"
+            current_request.save()
+
+        if 'reject' in request.POST:
+
+            current_request.appointment_confirmed = False
+            current_request.appointment_suggested = False
+            current_request.date_appointment = None
+            current_request.status = "Accepted"
+            current_request.save()
+
+        if 'cancel_appointment' in request.POST:
+
+            current_request.appointment_confirmed = False
+            current_request.date_appointment = None
+            current_request.appointment_suggested = False
+            current_request.status = "Accepted"
+            current_request.save()
+
+        if 'complete' in request.POST:
+
+            current_request.status = "Complete"
+            current_request.date_completed = datetime.now()
+            current_request.save()
+
         return HttpResponseRedirect('/')
 
     else:
 
-        user = request.user
-        created_query_list = Requests.objects.filter(requester=user)
-        accepted_query_list = Requests.objects.filter(accepter=user)
-
-        context = created_query_list | accepted_query_list
-        context = {'requests': context}
+        accepted_query_list = Requests.objects.exclude(status="Complete").exclude(reported=True).filter(accepter=user)
+        created_query_list = Requests.objects.exclude(status="Complete").exclude(reported=True).filter(requester=user)
 
         form = DateForm()
-        context2 = {'form': form}
+        #schedule_context = {'form': form}
 
-        return render(request, 'user/index.html', context, context2)
+        return render(request, 'user/index.html',
+                      {'accepted_requests': accepted_query_list, 'created_requests': created_query_list, 'form': form})
 
 
 def register(request):
@@ -188,6 +143,7 @@ def register(request):
             password = form.cleaned_data['password1']
             user = authenticate(username=username, password=password)
             login(request, user)
+
             return redirect('index')
 
     else:
@@ -297,10 +253,10 @@ def past_requests(request):
         past_accepter_query_list = Requests.objects.filter(requester=user, status="Complete")
         past_requester_query_list = Requests.objects.filter(accepter=user, status="Complete")
 
-        context = past_accepter_query_list | past_requester_query_list
-        context = {'requests': context}
+        #context = past_accepter_query_list | past_requester_query_list
+        #context = {'requests': context}
 
-        return render(request, 'user/past_requests.html', context)
+        return render(request, 'user/past_requests.html', {'accepted_requests': past_accepter_query_list, 'created_requests': past_requester_query_list})
 
 
 

@@ -13,7 +13,8 @@ from .models import Thread, ChatMessage
 
 class InboxView(LoginRequiredMixin, ListView):
     template_name = 'chat/inbox.html'
-    context_object_name = 'threads' # was commented out
+    context_object_name = 'threads'
+    # was commented out
 
     def get_queryset(self):
         return Thread.objects.by_user(self.request.user)

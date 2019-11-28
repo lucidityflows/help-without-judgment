@@ -27,7 +27,7 @@
 			font-family: 'Helvetica','Arial', sans-serif;
 		}
 
-        ul#chat-items
+        #chat-items ul
 		{
  			background-color: white;
     		max-height:120px;/*The important part*/
@@ -55,7 +55,7 @@
 
 <!--Navbar Starts Here -->
 	<nav class="mb-1 navbar navbar-expand-lg navbar-dark secondary-color lighten-1">
-        <a class="navbar-brand" href="#">Help Without Judgment</a>
+        <a class="navbar-brand" href="{% url 'index' %}">Help Without Judgment</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-555" aria-controls="navbarSupportedContent-555" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -70,14 +70,19 @@
                     <a class="nav-link" href="{% url 'create_request' %}">Create Request</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'open_requests' %}">View Requests</a>
+                    <a class="nav-link" href="{% url 'open_requests' %}">Available Requests</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'past_requests' %}">Past Requests</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">View Inbox</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-555" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>
                     <div class="dropdown-menu dropdown-secondary" aria-labelledby="navbarDropdownMenuLink-555">
                         <a class="dropdown-item" href="#">Create an Event</a>
-                        <a class="dropdown-item" href="{% url 'past_requests' %}">View Past Requests</a>
-                        <a class="dropdown-item" href="#">Report a Problem</a>
+                        <a class="dropdown-item" href="#">Message Moderator</a>
                     </div>
                 </li>
             </ul>

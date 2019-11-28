@@ -36,6 +36,7 @@ class Requests(models.Model):
     accepter = models.CharField(max_length=150, null=True)
     accepter_feedback = models.CharField(max_length=250, default='None')
     requester_feedback = models.CharField(max_length=250, default='None')
+    reported = models.BooleanField(default=False)
 
     def __str__(self):
         return self.description

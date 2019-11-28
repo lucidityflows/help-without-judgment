@@ -1,5 +1,14 @@
 {% extends "user/base.html" %}
 
+<style>
+
+    .caption p
+    {
+        text-align: left;
+    }
+
+</style>
+
 {% block greeting %}
     {% if user.is_authenticated %}
         <h2> Welcome back {{ user.username }}</h2>
@@ -10,152 +19,141 @@
 {% endblock %}
 
 {% block content %}
+
+    {% if created_requests.count > 0 %}
+    <h4> You have created the following Service Requests </h4>
+    <hr class="my-4">
     <div class="row">
-        {% for request in requests %}
-            {% if request.status != "Complete" %}
+        {% for request in created_requests %}
             <div class="col-sm-4 col-md-r">
-                <div class="thumbnail">
+                <div class="thumbnail"><br>
                     {% if request.type == 'Furniture Service' %}
-                    <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/furniture_request_default_image.jpg" alt="furniture_request_default_image.jpg">
-                    {% elif request.type == 'Food Service' %}
-                    <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/food_request_default_image.jpg" alt="food_request_default_image.jpg">
-                    {% elif request.type == 'Clothing Service' %}
-                    <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/clothing_request_default_image.jpg" alt="clothing_request_default_image.jpg">
-                    {% elif request.type == 'Interpreter Service' %}
-                    <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/interpreter_request_default_image.png" alt="interpreter_request_default_image.jpg">
-                    {% elif request.type == 'Transportation Service' %}
-                    <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/transportation_request_default_image.jpg" alt="transportation_request_default_image.jpg">
+                        <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/furniture_request_default_image.jpg" alt="furniture_request_default_image.jpg">
+                        {% elif request.type == 'Food Service' %}
+                        <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/food_request_default_image.jpg" alt="food_request_default_image.jpg">
+                        {% elif request.type == 'Clothing Service' %}
+                        <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/clothing_request_default_image.jpg" alt="clothing_request_default_image.jpg">
+                        {% elif request.type == 'Interpreter Service' %}
+                        <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/interpreter_request_default_image.png" alt="interpreter_request_default_image.jpg">
+                        {% elif request.type == 'Transportation Service' %}
+                        <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/transportation_request_default_image.jpg" alt="transportation_request_default_image.jpg">
                     {% endif %}
 
                     <div class="caption">
                         <h3><strong>Status: </strong>{{ request.status }}</h3>
                         <p><strong>Type: </strong>{{ request.type }}</p>
-                        <p><strong>Requested By: </strong>{{ request.requester }}
-                        {% if request.requester != user %}
-                            <form action= "{% url 'index' %}" method="POST" class="form" id="message">
-                                {% csrf_token %}
-                                    <input type="hidden" name="primary_key" value="{{ request.pk }}">
-                                    <input type="hidden" name="button" value="message_user">
-                                    <button type="submit" class="btn btn-info">Message User</button>
-                            </form>
-                        {% endif %} </p>
                         <p><strong>Description: </strong>{{ request.description }}</p>
                         <p><strong>Created On: </strong>{{ request.date_created|date:"F d, Y" }}</p>
-                        <p><strong>Accepted By: {{ request.accepter }}</strong>
-                        {% if request.accepter != none and request.accepter != user.username %}
-                            <form action= "{% url 'index' %}" method="POST" class="form" id="message">
-                                {% csrf_token %}
-                                    <input type="hidden" name="primary_key" value="{{ request.pk }}">
-                                    <input type="hidden" name="button" value="message_user">
-                                    <button type="submit" class="btn btn-info">Message User</button>
-                            </form>
-                        {% endif %} </p>
+                        <p><strong>Accepted By: {{ request.accepter }}</strong></p>
 
-                        {% if request.requester == user and request.appointment_confirmed == True %}
-                            <p><strong>Request Appointment: </strong>{{ request.date_appointment }} (Confirmed)</p>
-                            <form action= "{% url 'index' %}" method="POST" class="form" id="appointment">
-                                {% csrf_token %}
-                                    <input type="hidden" name="primary_key" value="{{ request.pk }}">
-                                    <input type="hidden" name="button" value="cancel_appointment">
-                                    <button type="submit" class="btn btn-info">Cancel Appointment</button>
-                            </form>
+                        {% if request.appointment_confirmed == True %}
+                            <p><strong>Appointment: </strong>{{ request.date_appointment }} (Confirmed)</p>
 
-                        {% elif request.accepter == user.username and request.appointment_suggested == True and request.appointment_confirmed == False %}
-                            <p><strong>Appointment Offer: </strong>{{ request.date_appointment }} (Awaiting Requester Confirmation)</p>
-                            <form action= "{% url 'index' %}" method="POST" class="form" id="appointment">
-                                {% csrf_token %}
-                                    <input type="hidden" name="primary_key" value="{{ request.pk }}">
-                                    <input type="hidden" name="button" value="cancel_appointment">
-                                    <button type="submit" class="btn btn-info">Cancel Appointment</button>
-                            </form>
+                        {% elif request.status != "Incomplete" and request.appointment_suggested == False%}
+                            <p><strong>Appointment: {{ request.accepter }} has not suggested an appointment.</strong></p>
 
-                        {% elif request.accepter == user.username and request.appointment_suggested == True and request.appointment_confirmed == True %}
-                            <p><strong>Request Appointment: </strong>{{ request.date_appointment }} (Confirmed)</p>
-                            <form action= "{% url 'index' %}" method="POST" class="form" id="appointment">
-                                {% csrf_token %}
-                                    <input type="hidden" name="primary_key" value="{{ request.pk }}">
-                                    <input type="hidden" name="button" value="cancel_appointment">
-                                    <button type="submit" class="btn btn-info">Cancel Appointment</button>
-                            </form>
+                        {% elif request.status == "Incomplete"%}
+                            <p><strong>Appointment: Your request is still awaiting an accepter.</strong></p>
                         {% endif %}
 
-                        {% block set_appointment %}
-                            {% if request.requester != user.username and request.accepter == user.username and request.appointment_suggested == False %}
-                                <form action= "{% url 'index' %}" method="POST" class="form" id="appointment">
-                                    {% csrf_token %}
-                                    <label for="date_appointment">Schedule Appointment:</label>
-                                    <input size="15px" type="text" id="id_date" name="new_date" value="{{ form.date|default_if_none:''}}">
-                                    <input type="hidden" name="primary_key" value="{{ request.pk }}">
-                                    <input type="hidden" name="button" value="appointment">
-                                    <button type="submit" class="btn btn-info">Submit Appointment</button>
-                                </form>
-                            {% endif %}
-                        {% endblock set_appointment %}
-
-                        {% block confirm_appointment %}
-                            {% if request.requester == user and request.date_appointment != null and request.appointment_confirmed == False %}
-                                <p>{{ request.accepter }} has offered to complete your request at: {{ request.date_appointment }}</p>
-                                <p>Please confirm or reject this offer:</p>
-                                <span>
-                                <form action = "{% url 'index' %}" method="POST" class="form" id="confirm" style="display: inline-block;">
-                                {% csrf_token %}
-                                    <input type="hidden" name="primary_key" value="{{ request.pk }}">
-                                    <input type="hidden" name="button" id="agree_button" value="confirm_appointment">
-                                    <button type="submit" value="agree" class="btn btn-success">Agree</button>
-                                </form>
-                                <form action = "{% url 'index' %}" method="POST" class="form" id="confirm" style="display: inline-block;">
-                                {% csrf_token %}
-                                    <input type="hidden" name="primary_key" value="{{ request.pk }}">
-                                    <input type="hidden" name="button" id="reject_button" value="reject_appointment">
-                                    <button type="submit" value="reject" class="btn btn-warning">Reject</button>
-                                </form>
-
-                                </span>
-                            {% endif %}
-                        {% endblock confirm_appointment %}
-
-                        {% block cancel_request %}
-                            {% if request.requester != user.username and request.accepter == user.username %}
-                                <div class="empty-form">
-                                    <form action= "{% url 'index' %}" method="POST" class="form" id="cancel">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="primary_key" value="{{ request.pk }}">
-                                        <input type="hidden" name="button" value="cancel">
-                                        <button type="submit" class="btn btn-warning">Give Back Request</button>
-                                    </form>
-                                </div>
-                            {% endif %}
-                        {% endblock cancel_request %}
-
-                        {% block delete_request %}
-                            {% if request.requester == user and request.appointment_confirmed == False %}
-                                <div class="empty-form">
-                                    <form action= "{% url 'index' %}" method="POST" class="form" id="delete">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="primary_key" value="{{ request.pk }}">
-                                        <input type="hidden" name="button" value="delete">
-                                        <button type="submit" class="btn btn-danger">Delete</button>
-                                    </form>
-                                </div>
-                            {% endif %}
-                        {% endblock delete_request %}
-
-                    {% block complete_request %}
-                    {% if request.requester == user and request.appointment_confirmed == True %}
-                        <form action= "{% url 'index' %}" method="POST" class="form" id="complete_appointment">
+                        <form action= "{% url 'index' %}" method="POST" class="form" id="user_is_requester">
                             {% csrf_token %}
                             <input type="hidden" name="primary_key" value="{{ request.pk }}">
-                            <input type="hidden" name="button" value="complete_appointment">
-                            <button type="submit" class="btn btn-success">My Request Is Complete!</button>
+                            <div class="form-group">
+                                {% if request.appointment_suggested == True and request.appointment_confirmed == False %}
+                                    <p>{{ request.accepter }} has suggested an appointment to complete your request.</p>
+                                    <p>Please Accept or Reject this an appointment at: {{ request.date_appointment }}</p>
+                                    <button value="accept" name="accept" type="submit" class="btn btn-link" id="accept" style="background: #48ad76; color: #F9F8F8;">Accept</button>
+                                    <button value="reject" name="reject" type="submit" class="btn btn-link" id="reject" style="background: #c69d3e; color: #F9F8F8;">Reject</button>
+                                {% endif %}
+                                {% if request.appointment_confirmed == True %}
+                                    <button value="cancel_appointment" name="cancel_appointment" type="submit" class="btn btn-link" id="cancel_appointment" style="background: #40a9cf; color: #F9F8F8;">Cancel Appointment</button>
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                {% if request.accepter != none %}
+                                    <button value="message" name="message" type="submit" class="btn btn-link" id="message" style="background: #1a2a67; color: #F9F8F8;">Message</button>
+                                {% endif %}
+                                {% if request.appointment_confirmed == True %}
+                                    <button value="complete" name="complete" type="submit" class="btn btn-link" id="complete" style="background: #48ad76; color: #F9F8F8;">Complete</button>
+                                {% endif %}
+                                {% if request.status != "Incomplete" %}
+                                    <button value="cancel" name="cancel" type="submit" class="btn btn-link" id="cancel" style="background: #c69d3e; color: #F9F8F8;">Cancel</button>
+                                {% endif %}
+                                <button value="delete" name="delete" type="submit" class="btn btn-link" id="delete" style="background: #f44336; color: #F9F8F8;">Delete</button>
+                            </div>
                         </form>
-                    {% endif %}
-                    {% endblock complete_request %}
-
                     </div>
                 </div>
             </div>
-            {% endif %}
         {% endfor %}
     </div>
-{% endblock content %}
+    {% else %}
+    <h4> You do not have any open service requests. </h4>
+    <hr class="my-4">
+    {% endif %}
 
+    <hr class="my-4">
+    {% if accepted_requests.count > 0 %}
+    <h4> You have accepted the following Service Requests </h4>
+    <hr class="my-4">
+    <div class="row">
+        {% for request in accepted_requests %}
+            <div class="col-sm-4 col-md-r">
+                <div class="thumbnail"><br>
+                    {% if request.type == 'Furniture Service' %}
+                        <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/furniture_request_default_image.jpg" alt="furniture_request_default_image.jpg">
+                        {% elif request.type == 'Food Service' %}
+                        <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/food_request_default_image.jpg" alt="food_request_default_image.jpg">
+                        {% elif request.type == 'Clothing Service' %}
+                        <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/clothing_request_default_image.jpg" alt="clothing_request_default_image.jpg">
+                        {% elif request.type == 'Interpreter Service' %}
+                        <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/interpreter_request_default_image.png" alt="interpreter_request_default_image.jpg">
+                        {% elif request.type == 'Transportation Service' %}
+                        <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/transportation_request_default_image.jpg" alt="transportation_request_default_image.jpg">
+                    {% endif %}
+
+                    <div class="caption">
+                        <h3><strong>Status: </strong>{{ request.status }}</h3>
+                        <p><strong>Type: </strong>{{ request.type }}</p>
+                        <p><strong>Description: </strong>{{ request.description }}</p>
+                        <p><strong>Created On: </strong>{{ request.date_created|date:"F d, Y" }}</p>
+                        <p><strong>Requested By: {{ request.requester }}</strong></p>
+
+                        {% if request.appointment_confirmed == True %}
+                            <p><strong>Appointment: </strong>{{ request.date_appointment }} (Confirmed)</p>
+                        {% elif request.appointment_suggested == True and request.appointment_confirmed == False %}
+                            <p><strong>Appointment: </strong>{{ request.date_appointment }} (Awaiting Request Confirmation)</p>
+                        {% endif %}
+
+                        <form action= "{% url 'index' %}" method="POST" class="form" id="user_is_accepter">
+                            {% csrf_token %}
+                            <input type="hidden" name="primary_key" value="{{ request.pk }}">
+                            <div class="form-group">
+                            {% if request.appointment_suggested == False %}
+                                <label for="date_appointment">Schedule Appointment: </label>
+                                <input size="15px" type="text" id="id_date" name="new_date">
+                                <button value="schedule" name="schedule" type="submit" class="btn btn-link" style="background: #40a9cf; color: #F9F8F8;">Schedule</button>
+                            {% endif %}
+
+                            {% if request.appointment_confirmed == True%}
+                                <button value="cancel_appointment" name="cancel_appointment" type="submit" class="btn btn-link" id="cancel_appointment" style="background: #40a9cf; color: #F9F8F8;">Cancel Appointment</button>
+                            {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <button value="message" name="message" type="submit" class="btn btn-link" style="background: #1a2a67; color: #F9F8F8;">Message</button>
+                                <button value="cancel" name="cancel" type="submit" class="btn btn-link" style="background: #c69d3e; color: #F9F8F8;">Cancel Request</button>
+                                <button value="report" name="report" type="submit" class="btn btn-link" style="background: #f44336; color: #F9F8F8;">Report</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <h4> You have not accepted any open service requests.</h4>
+    <hr class="my-4">
+    {% endif %}
+
+{% endblock content %}
