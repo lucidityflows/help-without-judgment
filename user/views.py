@@ -12,6 +12,7 @@ from datetime import datetime
 from django.utils import timezone
 from chat.models import Thread
 from django import forms
+from .forms import ProfileUpdateForm, UserUpdateForm
 
 from django.contrib.auth.models import User
 
@@ -259,4 +260,28 @@ def past_requests(request):
         return render(request, 'user/past_requests.html', {'accepted_requests': past_accepter_query_list, 'created_requests': past_requester_query_list})
 
 
+@login_required(login_url='/accounts/login/')
+def profile(request):
+
+    if request.method == "POST":
+
+        user_form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            return render(request, 'user/profile.html')
+
+    else:
+
+        user_form = UserUpdateForm(instance=request.user)
+        profile_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        'user_form': user_form,
+        'profile_form': profile_form
+    }
+
+    return render(request, 'user/profile.html', context)
 
