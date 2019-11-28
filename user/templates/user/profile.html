@@ -1,0 +1,25 @@
+{% extends "user/base.html" %}
+
+{% block pageheader %}Update Your Profile{% endblock %}
+
+{% block content %}
+    <div class="empty-form">
+        <form action= "{% url 'profile' %}" enctype="multipart/form-data" method="POST" class="form">
+
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="request_type">Update your information</label>
+                {{ user_form }}
+            </div>
+
+            <div class="form-group">
+                <label for="request_description">Update profile pic</label>
+                {{ profile_form }}
+            </div>
+
+            <button type="submit" class="btn btn-link" style="background: #40a9cf; color: #F9F8F8;">Update</button>
+        </form>
+    </div>
+
+{% endblock content %}
