@@ -8,5 +8,5 @@ urlpatterns = [
     path('create_request', views.create_request, name='create_request'),
     path('view_past_requests', views.past_requests, name='past_requests'),
     path('profile', views.profile, name='profile'),
-
+    path('inbox', views.inbox, name='inbox'),
 ]

@@ -22,7 +22,7 @@
 			font-family: 'Helvetica','Arial', sans-serif;
 		}
 
-		.body
+		body
 		{
 			font-family: 'Helvetica','Arial', sans-serif;
 		}
@@ -76,7 +76,7 @@
                     <a class="nav-link" href="{% url 'past_requests' %}">Past Requests</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">View Inbox</a>
+                    <a class="nav-link" href="{% url 'inbox' %}">View Inbox</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-555" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>
@@ -87,11 +87,6 @@
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto nav-flex-icons">
-                <li class="nav-item">
-                    <a class="nav-link waves-effect waves-light">1
-                        <i class="fas fa-envelope"></i>
-                    </a>
-                </li>
                 <li class="nav-item avatar dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-55" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <img src="{{ user.profile.image.url }}" class="rounded-circle z-depth-0" alt="avatar image" width="100px" height="100px">
