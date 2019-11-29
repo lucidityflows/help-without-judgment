@@ -1,7 +1,7 @@
 {% extends "user/base.html" %}
 
 <style>
-    .body
+    body
     {
         font-family: 'Helvetica','Arial', sans-serif;
         background-color: #42A1C9
@@ -19,21 +19,31 @@
         list-style-type: none;
     }
 </style>
-
+{% block pageheader %}
+    {% if user != object.first %}
+        Your conversation with {{ object.first }}
+    {% else %}
+        Your conversation with {{ object.second }}
+    {% endif %}
+{% endblock pageheader%}
 
 {% block content %}
-<h3 style="text-align: left;" >User: {% if user != object.first %}{{ object.first }}{% else %}{{ object.second }}{% endif %}</h3>
 <ul style="text-align: left;" id='chat-items'>
 {% for chat in object.chatmessage_set.all %}
 
-<li><b>{{ chat.user }}:</b> {{ chat.message }}</li>
+<li>
+    <img src="{{ chat.user.profile.image.url }}" class="rounded-circle z-depth-0" alt="avatar image" width="50px" height="50px">
+    <b>{{ chat.user }}:</b> {{ chat.message }}
+</li><br>
 
 {% endfor %}
 </ul>
 
-<form style="text-align: left;" id='form' method='POST'> {% csrf_token %}
-{{form.as_p }}
-<input type='submit' style="background: #1a2a67; color: #F9F8F8;" class='btn btn-link'/>
+<form style="text-align: left;" id='form' method='POST'>
+    {% csrf_token %}
+    {{form.as_p }}
+    <input type="hidden" value="{{ user.profile.image.url }}" name="profile_image" id="profile_image">
+    <input type='submit' style="background: #1a2a67; color: #F9F8F8;" class='btn btn-link'/>
 </form>
 
 {% endblock %}
@@ -47,6 +57,13 @@ $(document).ready(function(){
 	var chatItems = $('#chat-items')
 	var loc = window.location
 	var wsStart = 'ws://'
+
+    console.log(formData);
+	var profile_image = $("#profile_image");
+	console.log(profile_image.val());
+	profile_image = profile_image.val();
+	console.log(profile_image);
+
   	if (loc.protocol == 'https:') {
   		wsStart = 'wss://'
   	}
@@ -62,7 +79,12 @@ $(document).ready(function(){
 		//alert(e.data)
 		var msgData = JSON.parse(e.data)
 		console.log(msgData)
-		chatItems.append(`<li><b>${msgData.user}:</b> ${msgData.msg}</li>`)
+
+	    console.log("The profile pic variable is: " + profile_image);
+	    console.log("THe profile pic source is: " + profile_image.src);
+
+	    chatItems.append(`<li><img src="${profile_image}" id="chat_image" class="rounded-circle z-depth-0" alt="avatar image" width="50px" height="50px"><b>    ${msgData.user}:</b> ${msgData.msg}</li><br>`);
+		//chatItems.append(`<li><b>${msgData.user}:</b> ${msgData.msg}</li>`)
    		chatItems.animate({scrollTop: chatItems.prop("scrollHeight")}, 500);
 	}
 
