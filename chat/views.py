@@ -12,7 +12,7 @@ from .models import Thread, ChatMessage
 
 
 class InboxView(LoginRequiredMixin, ListView):
-    template_name = 'chat/inbox.html'
+    template_name = 'chat/../user/templates/user/inbox.html'
     context_object_name = 'threads'
     # was commented out
 
@@ -58,7 +58,5 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
         message = form.cleaned_data.get("message")
         ChatMessage.objects.create(user=user, thread=thread, message=message)
         return super().form_valid(form)
-
-
 
 

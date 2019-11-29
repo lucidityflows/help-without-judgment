@@ -285,3 +285,14 @@ def profile(request):
 
     return render(request, 'user/profile.html', context)
 
+
+def inbox(request):
+
+    user = request.user
+
+    message_thread_list_1 = Thread.objects.filter(first=user)
+    message_thread_list_2 = Thread.objects.filter(second=user)
+
+    message_list = message_thread_list_1 | message_thread_list_2
+
+    return render(request, 'user/inbox.html', {'messages': message_list})
