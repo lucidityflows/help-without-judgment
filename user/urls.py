@@ -9,4 +9,5 @@ urlpatterns = [
     path('view_past_requests', views.past_requests, name='past_requests'),
     path('profile', views.profile, name='profile'),
     path('inbox', views.inbox, name='inbox'),
+    path('non_profits', views.non_profits, name='non_profits'),
 ]

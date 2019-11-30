@@ -1,0 +1,43 @@
+{% extends "user/base.html" %}
+
+{% block pageheader %}Local Non-Profit Organizations{% endblock pageheader %}
+
+{% block content %}
+    <h4>There are local resources that can provide different, and sometimes more long-term assistance.</h4>
+    <hr class="my-4">
+    <form action="{% url 'non_profits' %}" method="POST" class="empty-form">
+        {% csrf_token %}
+        <div class="form-group" align="center">
+            <div class="col-sm-3 col-md-r">
+                <div class="form-row">
+                    <label for="city_lookup">Enter a city</label>
+                    <input style="text-align:center;" name="city_input" type="text" id="city_input" class="form-control">
+                    <label for="state_lookup"><br>Enter the state initials</label>
+                    <input style="text-align:center;" name="state_input" type="text" id="state_input" class="form-control"><br>
+                </div>
+                <br><button type="submit" value="" name="submit" class="btn btn-link" style="background: #1a2a67; color: #F9F8F8;">Lookup Resources</button>
+            </div>
+        </div>
+    </form>
+{% endblock content %}
+
+{% block results%}
+    {% if charities %}
+        <hr class="my-4">
+        <div class="row">
+        {% for item in charities.items %}
+            <div class="col-sm-4 col-md-r">
+                <div class="card">
+                    <h5 class="card-header" style="background: #42A1C9; color: #F9F8F8;">{{ item.1.name }}</h5>
+                    <div class="card-body" style="background: #898E89; color: #F9F8F8;">
+                        <h5 class="card-text">Address: {{ item.1.address }}</h5>
+                        <h5 class="card-text">City: {{ item.1.city }}</h5>
+                        <h5 class="card-text">Zipcode: {{ item.1.zipcode }}</h5>
+                        <h5 class="card-text">Website: {{ item.1.website }}</h5>
+                    </div>
+                </div><br>
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+{% endblock results%}

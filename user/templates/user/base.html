@@ -78,6 +78,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'inbox' %}">View Inbox</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'non_profits' %}">Local Non-Profits</a>
+                </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-555" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>
                     <div class="dropdown-menu dropdown-secondary" aria-labelledby="navbarDropdownMenuLink-555">
@@ -117,20 +120,8 @@
             {% block content %}
             {% endblock content%}
 
-            {% block set_appointment %}
-            {% endblock set_appointment %}
-
-            {% block confirm_appointment %}
-            {% endblock confirm_appointment %}
-
-            {% block cancel_request %}
-            {% endblock cancel_request %}
-
-            {% block delete_request %}
-            {% endblock delete_request %}
-
-            {% block complete_request %}
-            {% endblock complete_request %}
+            {% block results %}
+            {% endblock results %}
 
         </div><!-- End container -->
     </div> <!-- End jumbotron -->
