@@ -13,8 +13,10 @@ from django.utils import timezone
 from chat.models import Thread
 from django import forms
 from .forms import ProfileUpdateForm, UserUpdateForm
-
 from django.contrib.auth.models import User
+import requests
+import json
+from django.http import HttpResponse
 
 # Create your views here.
 
@@ -296,3 +298,51 @@ def inbox(request):
     message_list = message_thread_list_1 | message_thread_list_2
 
     return render(request, 'user/inbox.html', {'messages': message_list})
+
+
+def non_profits(request):
+
+    if request.method == "POST":
+
+        charity_dict = {}
+        city_input = request.POST["city_input"]
+        state_input = request.POST["state_input"]
+
+        json_response = get_nonprofits_from_zipcode(city_input, state_input)
+        for item in json_response:
+            name = item["charityName"]
+            address = item["mailingAddress"]["streetAddress1"]
+            city = item["mailingAddress"]["city"]
+            zipcode = item["mailingAddress"]["postalCode"]
+            website = item["websiteURL"]
+            mission = item["mission"]
+            new_dict = {"name": name, "address": address, "city": city, "zipcode": zipcode, "website": website, "mission": mission}
+            #new_dict = {"name": [name, address, city, zipcode, website, mission]}
+            charity_dict[name] = new_dict
+
+        context = {'charities': charity_dict}
+        #context = {'charities': json.dumps(charity_dict)
+        return render(request, 'user/non_profits.html', {'charities': charity_dict})
+
+    else:
+
+        return render(request, 'user/non_profits.html')
+
+
+def get_nonprofits_from_zipcode(city, state):
+
+    charity_navigator_base_URL = "https://api.data.charitynavigator.org/v2"
+    hwj_app_id = "app_id=d1284ae7"
+    hwj_app_key = "app_key=ed550eb38ecf7e9e7c24ca4b40f2ce6e"
+    api_method = "/Organizations"
+    page_size = "pageSize=100"
+    city = "city=" + city.lower()
+    state = "state=" + state.upper()
+
+    api_call = charity_navigator_base_URL + api_method + "?" + hwj_app_id + "&" + hwj_app_key + "&" + page_size + "&" + state + "&" + city
+    response = requests.get(api_call)
+    json_response = response.json()
+    print(json_response)
+    return json_response
+
+
