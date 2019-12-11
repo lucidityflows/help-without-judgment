@@ -39,13 +39,19 @@ def index(request):
             current_request.status = "Incomplete"
             current_request.appointment_suggested = False
             current_request.save()
+            user.profile.canceled_count += 1
+            user.profile.save()
 
         if 'delete' in request.POST:
             current_request.delete()
+            user.profile.deleted_count += 1
+            user.profile.save()
 
         if 'report' in request.POST:
             current_request.reported = True
             current_request.save()
+            user.profile.reported_count += 1
+            user.profile.save()
 
         if 'message' in request.POST:
 
@@ -96,6 +102,8 @@ def index(request):
             current_request.appointment_confirmed = True
             current_request.status = "Confirmed"
             current_request.save()
+            user.profile.accepted_count += 1
+            user.profile.save()
 
         if 'reject' in request.POST:
 
@@ -118,6 +126,8 @@ def index(request):
             current_request.status = "Complete"
             current_request.date_completed = datetime.now()
             current_request.save()
+            user.profile.completed_count += 1
+            user.profile.save()
 
         return HttpResponseRedirect('/')
 
@@ -209,6 +219,8 @@ def create_request(request):
             current_request = form.save(commit=False)
             current_request.requester = user
             current_request.save()
+            user.profile.created_count += 1
+            user.profile.save()
 
             return HttpResponseRedirect('/')
 

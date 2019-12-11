@@ -105,6 +105,15 @@ class Profile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default="default_profile_image.jpg", upload_to="profile_pics")
+    created_count = models.IntegerField(default=0)
+    accepted_count = models.IntegerField(default=0)
+    deleted_count = models.IntegerField(default=0)
+    completed_count = models.IntegerField(default=0)
+    canceled_count = models.IntegerField(default=0)
+    other_user_count = models.IntegerField(default=0)
+    reported_count = models.IntegerField(default=0)
+    user_anniversary = models.DateField(auto_now_add=True)
+    is_moderator = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.user.username} Profile'
