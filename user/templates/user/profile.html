@@ -24,14 +24,16 @@
         </div>
 
         <div class="col-sm-6 col-md-r" style="text-align:center;">
-            <h4>User Statistics</h4><br>
+            <h4>User Statistics </h4><br>
             <div class="card">
-                <h5 class="card-header" style="background: #42A1C9; color: #F9F8F8;">User Stats</h5>
+                <h5 class="card-header" style="background: #42A1C9; color: #F9F8F8;">Member Since: {{ user.profile.user_anniversary|date:"F d, Y" }}</h5>
                 <div class="card-body" style="background: #795A63; color: #F9F8F8;">
-                    <h5 class="card-text">Requests Created:</h5>
-                    <h5 class="card-text">Requests Completed:</h5>
-                    <h5 class="card-text">Requests Canceled:</h5>
-                    <h5 class="card-text">Connected Users:</h5>
+                    <h5 class="card-text">Requests Created: {{ user.profile.created_count }}</h5>
+                    <h5 class="card-text">Requests Accepted: {{ user.profile.accepted_count }}</h5>
+                    <h5 class="card-text">Requests Completed: {{ user.profile.completed_count }}</h5>
+                    <h5 class="card-text">Requests Canceled: {{ user.profile.canceled_count }}</h5>
+                    <h5 class="card-text">Requests Deleted: {{ user.profile.deleted_count }}</h5>
+                    <h5 class="card-text">Users Affected: {{ user.profile.other_user_count }}</h5>
                 </div>
             </div>
         </div>
