@@ -174,6 +174,7 @@ def logout(request):
     return redirect('/accounts/login')
 
 
+@login_required(login_url='/accounts/login/')
 def open_requests(request):
 
     if request.method == "GET":
@@ -204,6 +205,7 @@ def open_requests(request):
         return HttpResponseRedirect('/')
 
 
+@login_required(login_url='/accounts/login/')
 def create_request(request):
 
     if request.method == "POST":
@@ -233,6 +235,7 @@ def create_request(request):
     return render(request, 'user/create_request.html', context)
 
 
+@login_required(login_url='/accounts/login/')
 def past_requests(request):
 
     if request.method == "POST":
@@ -298,18 +301,28 @@ def profile(request):
     return render(request, 'user/profile.html', context)
 
 
+@login_required(login_url='/accounts/login/')
 def inbox(request):
 
     user = request.user
 
-    message_thread_list_1 = Thread.objects.filter(first=user)
-    message_thread_list_2 = Thread.objects.filter(second=user)
+    if user.profile.is_moderator:
 
-    message_list = message_thread_list_1 | message_thread_list_2
+        message_list = Thread.objects.all()
 
-    return render(request, 'user/inbox.html', {'messages': message_list})
+        return render(request, 'user/inbox.html', {'messages': message_list})
+
+    else:
+
+        message_thread_list_1 = Thread.objects.filter(first=user)
+        message_thread_list_2 = Thread.objects.filter(second=user)
+
+        message_list = message_thread_list_1 | message_thread_list_2
+
+        return render(request, 'user/inbox.html', {'messages': message_list})
 
 
+@login_required(login_url='/accounts/login/')
 def non_profits(request):
 
     if request.method == "POST":
