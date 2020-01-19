@@ -27,7 +27,7 @@ FEEDBACK_TYPES = [
 class Requests(models.Model):
 
     status = models.CharField(max_length=50, default="Incomplete")
-    description = models.CharField(max_length=250)
+    description = models.CharField(max_length=500)
     type = models.CharField(choices=REQUEST_TYPES, max_length=50, default='Item Service')
     date_created = models.DateTimeField(auto_now_add=True)
     date_appointment = models.DateTimeField(null=True)
@@ -48,7 +48,9 @@ class RequestForm(ModelForm):
 
     class Meta:
         model = Requests
-        fields = ['description', 'type']
+        fields = ['type', 'description']
+        widgets = {'description': forms.Textarea}
+        #description = forms.CharField(widget=forms.Textarea)
 
 
 class AcceptRequestForm(ModelForm):
