@@ -1,37 +1,66 @@
 {% extends "user/base.html" %}
 
-{% block pageheader %}Inbox{% endblock pageheader %}
+{% block pageheader %}
+    {% if user.profile.is_moderator == False %}
+        Inbox
+    {% else %}
+        Moderator Inbox
+    {% endif %}
+{% endblock pageheader %}
 
 {% block content %}
+{% if user.profile.is_moderator == False %}
     {% if messages.count > 0 %}
         <h4> These are your current conversations </h4>
         <hr class="my-4">
         <div class="row">
-        {% for message in messages %}
-            {% if message.first == user %}
-                <div class="col-sm-4 col-md-r">
-                    <div class="card" style="width: 18rem;">
-                        <a id="message_url" href="/messages/{{ message.second.username }}"><img src="{{ message.second.profile.image.url }}" class="card-img-top" width="300px" height="250px" alt="profile_image"></a>
-                        <div class="card-body">
-                            <p class="card-text">Conversation with {{ message.second }}</p>
-                            <p class="card-text">Last Message: {{ message.updated }}</p>
+            {% for message in messages %}
+                {% if message.first == user %}
+                    <div class="col-sm-4 col-md-r">
+                        <div class="card" style="width: 18rem;">
+                            <a id="message_url" href="/messages/{{ message.second.username }}"><img src="{{ message.second.profile.image.url }}" class="card-img-top" width="300px" height="250px" alt="profile_image"></a>
+                            <div class="card-body">
+                                <p class="card-text">Conversation with {{ message.second }}</p>
+                                <p class="card-text">Last Message: {{ message.updated }}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% else %}
-                <div class="col-sm-4 col-md-r">
-                    <div class="card" style="width: 18rem;">
-                        <a href="/messages/{{ message.first.username }}"><img src="{{ message.first.profile.image.url }}" class="card-img-top" width="300px" height="250px" alt="profile_image"></a>
-                        <div class="card-body">
-                            <p class="card-text">Conversation with {{ message.first }}</p>
-                            <p class="card-text">Last Message: {{ message.updated }}</p>
+                {% else %}
+                    <div class="col-sm-4 col-md-r">
+                        <div class="card" style="width: 18rem;">
+                            <a href="/messages/{{ message.first.username }}"><img src="{{ message.first.profile.image.url }}" class="card-img-top" width="300px" height="250px" alt="profile_image"></a>
+                            <div class="card-body">
+                                <p class="card-text">Conversation with {{ message.first }}</p>
+                                <p class="card-text">Last Message: {{ message.updated }}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endif %}
-        {% endfor %}
+                {% endif %}
+            {% endfor %}
         </div>
     {% else %}
         <h4> You do not currently have any conversations in your Inbox.</h4>
     {% endif %}
+
+{% else %}
+    {% if messages.count > 0 %}
+        <h4> These are all user conversations </h4>
+        <hr class="my-4">
+        <div class="row">
+        {% for message in messages %}
+            <div class="col-sm-4 col-md-r">
+                <div class="card" style="width: 18rem;">
+                    <a id="message_url" href="/messages/{{ message.second.username }}"><img src="{{ message.second.profile.image.url }}" class="card-img-top" width="300px" height="250px" alt="profile_image"></a>
+                    <div class="card-body">
+                        <p class="card-text">Conversation between {{ message.first }} & {{ message.second }}</p>
+                        <p class="card-text">Last Message: {{ message.updated }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    {% else %}
+        <h4>There are not currently any user conversations.</h4>
+    {% endif %}
+{% endif %}
 {% endblock content %}
