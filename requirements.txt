@@ -13,6 +13,7 @@ cryptography==2.8
 daphne==2.3.0
 Django==2.2.7
 django-crispy-forms==1.8.1
+djangorestframework==3.11.0
 hiredis==1.0.1
 hyperlink==19.0.0
 idna==2.8

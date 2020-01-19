@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'channels',
     'chat',
-    'crispy_forms'
+    'crispy_forms',
+    'rest_framework',
 
 ]
 

@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from .models import Requests
+from .models import Requests, Profile
 from .models import RequestForm, AcceptRequestForm, CancelRequestForm, CloseRequestForm, DeleteRequestForm, \
     ScheduleAppointmentForm, DateForm, ConfirmAppointmentForm
 from django.http import HttpResponseRedirect
@@ -17,6 +17,8 @@ from django.contrib.auth.models import User
 import requests
 import json
 from django.http import HttpResponse
+from rest_framework import viewsets
+from .serializers import RequestsSerializer, ProfileSerializer
 
 # Create your views here.
 
@@ -368,4 +370,14 @@ def get_nonprofits_from_zipcode(city, state):
     print(json_response)
     return json_response
 
+
+class RequestsView(viewsets.ModelViewSet):
+
+    queryset = Requests.objects.all()
+    serializer_class = RequestsSerializer
+
+class ProfileView(viewsets.ModelViewSet):
+
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
 
