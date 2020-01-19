@@ -1,5 +1,10 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register('requests', views.RequestsView)
+router.register('profiles', views.ProfileView)
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -10,4 +15,5 @@ urlpatterns = [
     path('profile', views.profile, name='profile'),
     path('inbox', views.inbox, name='inbox'),
     path('non_profits', views.non_profits, name='non_profits'),
+    path('api/', include(router.urls)),
 ]
