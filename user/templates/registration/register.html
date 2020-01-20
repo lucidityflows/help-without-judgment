@@ -1,3 +1,4 @@
+{% load crispy_forms_tags %}
 <!doctype html>
 
 <html lang="en">
@@ -9,14 +10,13 @@
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
-	<script src="js/FrontEndMethods.js"></script>
 	<style>
 		.container
 		{
 			font-family: 'Helvetica','Arial', sans-serif;
 		}
 
-		.body
+		body
 		{
 			font-family: 'Helvetica','Arial', sans-serif;
 		}
@@ -25,11 +25,19 @@
             color: #F9F8F8;
         }
 
+        #hint_id_username, #hint_id_password1, #hint_id_password2{
+            display: none;
+        }
+
+        .asteriskField {
+            display: none;
+        }
+
+
 	</style>
 </head>
 
 <body style="background-color: #42A1C9;">
-
 	<div id="register">
 		<div id="logo" align="center">
   			<img src="../../static/registration/images/logo.png"  height="150x" width="150px" alt="HWJ_logo.png">
@@ -37,21 +45,23 @@
 		<h3 class="text-center text-white pt-5">Help Without Judgment</h3>
 		<div class="container">
 			<div id="login-row" class="row justify-content-center align-items-center">
-				<div id="login-column" class="col-md-6">
+				<div id="login-column" class="col-md-4">
 					<div id="login-box" class="col-md-12">
 
-                        <form method="POST" action="{% url 'register' %}">
+                        <form method="POST" class="form" action="{% url 'register' %}">
                             {% csrf_token %}
 
-                            {% if form.errors %}
-                            <p align="center">There are errors in the form!</p>
-                            {% endif %}
-
-                            <h3 class="text-center text-white">Register</h3>
-                            {{ form }}
+                            <h3 class="text-center text-white">Register</h3><br>
+                            <div align="center">
+                            {{ form|crispy }}
+                            </div>
                             <!-- Submit -->
                             <div class="form-group" align="center">
-                                <br><input type="submit" name="submit" class="btn btn-secondary btn-md" value="Register">
+                                <br><input type="submit" name="submit" class="btn btn-secondary btn-md btn-block" style="background-color: #795A63; color:#F9F8F8;" value="Register">
+                            </div>
+
+                            <div class="form-group" align="center">
+                                <a href="{% url 'login' %}" class="text-white">Already Registered? Login Here</a>
                             </div>
                         </form>
                     </div>

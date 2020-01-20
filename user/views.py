@@ -170,12 +170,6 @@ def register(request):
     return render(request, 'registration/register.html', context)
 
 
-def logout(request):
-
-    logout(request)
-    return redirect('/accounts/login')
-
-
 @login_required(login_url='/accounts/login/')
 def open_requests(request):
 
@@ -205,6 +199,12 @@ def open_requests(request):
         current_request.save()
 
         return HttpResponseRedirect('/')
+
+
+def logout(request):
+
+    logout(request)
+    return redirect('/accounts/login')
 
 
 @login_required(login_url='/accounts/login/')
@@ -375,6 +375,7 @@ class RequestsView(viewsets.ModelViewSet):
 
     queryset = Requests.objects.all()
     serializer_class = RequestsSerializer
+
 
 class ProfileView(viewsets.ModelViewSet):
 

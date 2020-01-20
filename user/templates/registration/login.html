@@ -1,3 +1,7 @@
+{% load socialaccount %}
+{% load crispy_forms_tags %}
+{% providers_media_js %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +12,20 @@
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+
+        label {
+            color: #F9F8F8;
+        }
+
+        .asteriskField {
+            display: none;
+        }
+
+
+    </style>
 </head>
 
 <body style="background-color: #42A1C9;">
@@ -18,41 +36,48 @@
 		<h3 id="title-banner" class="text-center text-white pt-5" >Help Without Judgment</h3>
 		<div id="main-wrapper" class="container" >
 			<div id="login-row" class="row justify-content-center align-items-center">
-				<div id="login-column" class="col-md-6">
+				<div id="login-column" class="col-md-4">
 					<div id="login-box" class="col-md-12">
 
-                        {% if form.errors %}
-                            <p align="center"> There's something wrong with what you entered!</p>
-                        {% endif %}
+
 
                         {% if next %}
-                        <p align="center">Please login to continue.</p>
+                            <p align="center">Please login to continue.</p>
                         {% endif %}
 
-                        <form id="login-form" class="form" method="POST" action="{% url 'login' %}" >
+                        <form id="login-form" class="form" method="POST" action="{% url 'login' %}" />
                             {% csrf_token %}
-                            <h3 class="text-center text-white" style="color: #795A63;">Login</h3>
+                            <h3 class="text-center text-white" style="color: #795A63;">Login</h3><br>
+
 							<!-- Username -->
 					  		<div class="form-group" align="center">
-								<label for="username" class="text-white">Username:</label><br>
-                                {{ form.username }}
+								{{ form|crispy }}
                             </div>
-                            <!-- Password -->
-					  		<div class="form-group" align="center">
-								<label for="password" class="text-white">Password:</label><br>
-                            {{ form.password }}
 
-                                <!-- Remember me/Submit -->
+                            <!-- Submit -->
                             <div class="form-group" align="center">
-								<br><input type="submit" name="submit" class="btn btn-secondary btn-md" value="Submit">
+                                <button type="submit" name="submit" class="btn btn-secondary btn-md btn-block" style="background-color: #795A63; color:#F9F8F8;" value="Submit">Login</button>
 							</div>
                             <input type="hidden" name="next" value=""{{ next }}>
 
+                            <!-- Google Login -->
+                            <div class="form-group" align="center">
+                                <a class="btn btn-block btn-social btn-google" style="background-color: #DD4B39; color:#F9F8F8;" href="{% provider_login_url "google" %}">
+                                    <span class="fa fa-google"></span> Sign in with Google
+                                </a>
+                            </div>
+
+                            <!-- Facebook Login -->
+                            <div class="form-group align="center">
+                                <a class="btn btn-block btn-social btn-facebook" style="background-color: #3B5998; color:#F9F8F8;" href="{% provider_login_url "facebook" method="js_sdk" %}">
+                                    <span class="fa fa-facebook"></span> Sign in with Facebook
+                                </a>
+                            </div>
+
                             <!-- Register Link -->
-							<div id="register-link" class="text-right">
-								<a href="https://helpwithoutjudgment.ga/register"
-								   class="text-white">Register here</a>
-							</div>
+                            <div id="register-link" align="center"><br>
+                                <a href="{% url 'register' %}" class="text-white">New User? Register Here</a>
+                            </div>
                         </form>
                     </div>
                 </div>
