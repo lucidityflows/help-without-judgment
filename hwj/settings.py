@@ -26,7 +26,9 @@ SECRET_KEY = 'y(zrdj91=3sqam5mm#)9f2f9-i_dz-%wezg@rei&lnr*40ynom'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.helpwithoutjudgment.ga', '159.203.72.81', 'wwww.helpwithoutjudgment.ga', '127.0.0.1']
+ALLOWED_HOSTS = ['.helpwithoutjudgment.ga', '159.203.72.81',
+                 'wwww.helpwithoutjudgment.ga', '127.0.0.1', '127.0.0.1:8000',
+                 'localhost:8000', 'localhost']
 
 
 # Application definition
@@ -44,7 +46,12 @@ INSTALLED_APPS = [
     'chat',
     'crispy_forms',
     'rest_framework',
-
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook',
+    'django.contrib.sites',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -73,6 +80,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request'
             ],
         },
     },
@@ -144,6 +152,7 @@ MEDIA_URL = '/media/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
+# Channels Settings w/ Redis
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
@@ -153,4 +162,17 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+# Django allauth settings
+AUTHENTICATION_BACKENDS = (
+    #  Needed to login by username in Django admin, regardless of allauth
+    "django.contrib.auth.backends.ModelBackend",
+
+    #  allauth specific authentication methods, such as login by email
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
+# Set the site ID
+SITE_ID = 3
+
 
