@@ -22,7 +22,6 @@ hyperlink==19.0.0
 idna==2.8
 incremental==17.5.0
 msgpack==0.6.2
-mysqlclient==1.4.4
 oauthlib==3.1.0
 Pillow==6.2.1
 pycparser==2.19
@@ -38,3 +37,4 @@ Twisted==19.10.0
 txaio==18.8.1
 urllib3==1.25.7
 zope.interface==4.7.1
+mysqlclient==1.4.4
