@@ -288,15 +288,15 @@ def profile(request):
 
         if profile_form.is_valid():
             profile_form.save()
-            return render(request, 'user/profile.html')
+            #return render(request, 'user/profile.html')
 
     else:
 
-        user_form = UserUpdateForm(instance=request.user)
+        #user_form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
 
     context = {
-        'user_form': user_form,
+        #'user_form': user_form,
         'profile_form': profile_form
     }
 
@@ -341,7 +341,9 @@ def non_profits(request):
             zipcode = item["mailingAddress"]["postalCode"]
             website = item["websiteURL"]
             mission = item["mission"]
-            new_dict = {"name": name, "address": address, "city": city, "zipcode": zipcode, "website": website, "mission": mission}
+            href_string = get_href_string(name)
+            new_dict = {"name": name, "address": address, "city": city, "zipcode": zipcode, "website": website,
+                        "mission": mission, "href_string": href_string}
             #new_dict = {"name": [name, address, city, zipcode, website, mission]}
             charity_dict[name] = new_dict
 
@@ -360,25 +362,43 @@ def get_nonprofits_from_zipcode(city, state):
     hwj_app_id = "app_id=d1284ae7"
     hwj_app_key = "app_key=ed550eb38ecf7e9e7c24ca4b40f2ce6e"
     api_method = "/Organizations"
-    page_size = "pageSize=100"
+    page_size = "pageSize=200"
     city = "city=" + city.lower()
     state = "state=" + state.upper()
+    #sort_ascending = "sort=NAME:ASC"
 
-    api_call = charity_navigator_base_URL + api_method + "?" + hwj_app_id + "&" + hwj_app_key + "&" + page_size + "&" + state + "&" + city
+    api_call = charity_navigator_base_URL + api_method + "?" + hwj_app_id + "&" + hwj_app_key + "&" + page_size + \
+               "&" + state + "&" + city
     response = requests.get(api_call)
     json_response = response.json()
     print(json_response)
     return json_response
 
 
-class RequestsView(viewsets.ModelViewSet):
+class RequestsView(viewsets.ReadOnlyModelViewSet):
 
     queryset = Requests.objects.all()
     serializer_class = RequestsSerializer
 
 
-class ProfileView(viewsets.ModelViewSet):
+class ProfileView(viewsets.ReadOnlyModelViewSet):
 
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
 
+
+def get_href_string(business_name):
+
+    href_string = "https://google.com/search?q="
+
+    for char in business_name:
+
+        if char == " ":
+
+            href_string += "+"
+
+        else:
+
+            href_string += char
+
+    return href_string

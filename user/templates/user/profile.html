@@ -1,4 +1,5 @@
 {% extends "user/base.html" %}
+{% load crispy_forms_tags %}
 
 {% block pageheader %}{{ user.username }}'s Profile{% endblock %}
 
@@ -6,16 +7,19 @@
     <div class="row">
         <div class="col-sm-6 col-md-r" style="text-align:center;">
             <h4>Profile Picture</h4>
-                <div class="thumbnail" style="text-align: center;"><br>
-                    <img style="border:2px solid black;" src={{ user.profile.image.url }}>
+                <div class="thumbnail" style="text-align: center;"><br><br>
+                    <img style="border:2px solid black;" width="350px" height="350px" src={{ user.profile.image.url }}>
+
                 </div>
                 <div class="caption" style="text-align: center;">
-                    <div class="empty-form">
+                    <div class="container">
                         <form action= "{% url 'profile' %}" enctype="multipart/form-data" method="POST" class="form">
                             {% csrf_token %}
                             <div class="form-group">
+                                <div class="col-sm-10" style="margin-left: 40px;">
                                 <label for="request_description">Update profile pic</label><br>
-                                {{ profile_form }}
+                                {{ profile_form|crispy }}
+                                </div>
                             </div>
                             <button type="submit" class="btn btn-link" style="background: #40a9cf; color: #F9F8F8;">Update</button>
                         </form>
@@ -25,7 +29,11 @@
 
         <div class="col-sm-6 col-md-r" style="text-align:center;">
             <h4>User Statistics </h4><br>
-            <div class="card">
+            <div class="container">
+                <canvas id="myChart" width="400" height="400"></canvas>
+            </div>
+
+            <!--<div class="card">
                 <h5 class="card-header" style="background: #42A1C9; color: #F9F8F8;">Member Since: {{ user.profile.user_anniversary|date:"F d, Y" }}</h5>
                 <div class="card-body" style="background: #795A63; color: #F9F8F8;">
                     <h5 class="card-text">Requests Created: {{ user.profile.created_count }}</h5>
@@ -35,9 +43,50 @@
                     <h5 class="card-text">Requests Deleted: {{ user.profile.deleted_count }}</h5>
                     <h5 class="card-text">Users Affected: {{ user.profile.other_user_count }}</h5>
                 </div>
-            </div>
+            </div> -->
         </div>
 
     </div> <!-- End of row -->
+<script>
+    var ctx = document.getElementById('myChart');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Created', 'Accepted', 'Completed', 'Canceled', 'Deleted', 'User Contacts'],
+            datasets: [{
+                label: 'User Stats',
+                data: [{{ user.profile.created_count }}, {{ user.profile.accepted_count }},
+                    {{ user.profile.completed_count }}, {{ user.profile.canceled_count }}, {{ user.profile.deleted_count }},
+                    {{ user.profile.other_user_count }}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+</script>
 
 {% endblock content %}

@@ -24,20 +24,29 @@
 {% block results%}
     {% if charities %}
         <hr class="my-4">
-        <div class="row">
-        {% for item in charities.items %}
-            <div class="col-sm-4 col-md-r">
-                <div class="card">
-                    <h5 class="card-header" style="background: #42A1C9; color: #F9F8F8;">{{ item.1.name }}</h5>
-                    <div class="card-body" style="background: #795A63; color: #F9F8F8;">
-                        <h5 class="card-text">Address: {{ item.1.address }}</h5>
-                        <h5 class="card-text">City: {{ item.1.city }}</h5>
-                        <h5 class="card-text">Zipcode: {{ item.1.zipcode }}</h5>
-                        <h5 class="card-text">Website: {{ item.1.website }}</h5>
-                    </div>
-                </div><br>
-            </div>
-        {% endfor %}
-        </div>
+        <table class="table table-bordered table-hover table-striped">
+            <thead>
+                <tr style="background-color: #42A1C9;">
+                    <th colspan="4"><h3>Local Non-Profit Search Results</h3></th>
+                </tr>
+                <tr style="background-color: #1a2a67;">
+                    <th style="width: 30%" scope="col"><h4>Name</h4></th>
+                    <th style="width: 25%" scope="col"><h4>Address</h4></th>
+                    <th style="width: 25%" scope="col"><h4>City</h4></th>
+                    <th style="width: 20%" scope="col"><h4>Zip Code</h4></th>
+                    <!--<th style="width: 20%" scope="col"><h4>Website</h4></th>-->
+                </tr>
+            </thead>
+
+            {% for item in charities.items %}
+                <tr>
+                    <th scope="row"><a href={{ item.1.href_string }} target="_blank"><h5>{{ item.1.name }}</h5></a></th>
+                    <td><h5>{{ item.1.address }}</h5></td>
+                    <td><h5>{{ item.1.city }}</h5></td>
+                    <td><h5>{{ item.1.zipcode }}</h5></td>
+                    <!--<td><h5>{{ item.1.website }}</h5></td>-->
+                </tr>
+            {% endfor %}
+        </table>
     {% endif %}
 {% endblock results%}
