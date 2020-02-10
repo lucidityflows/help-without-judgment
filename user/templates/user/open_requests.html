@@ -34,7 +34,7 @@
                             <form action= "{% url 'open_requests' %}" method="POST" class="form">
                                 {% csrf_token %}
                                 <input type="hidden" name="primary_key" value="{{ request.pk }}">
-                                <button type="submit" class="btn btn-link" style="background: #48ad76; color: #F9F8F8;">Accept</button>
+                                <button type="submit" class="btn btn-link" style="background: #48ad76; color: #F9F8F8;"><i class="fas fa-check-square"></i> Accept</button>
                             </form>
                         </div>
                     </div>

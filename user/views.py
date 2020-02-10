@@ -402,3 +402,9 @@ def get_href_string(business_name):
             href_string += char
 
     return href_string
+
+
+def support(request):
+
+    return render(request, 'user/support.html',)
+

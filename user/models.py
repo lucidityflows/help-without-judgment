@@ -103,6 +103,15 @@ class DateForm(forms.Form):
     date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M', ''], required=False)
 
 
+class SupportTicket(models.Model):
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    subject = models.CharField(max_length=500)
+    body = models.CharField(max_length=500)
+    date_created = models.DateField(auto_now_add=True)
+    status = models.CharField(max_length=100, default="In-Progress")
+
+
 class Profile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
