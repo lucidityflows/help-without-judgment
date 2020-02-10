@@ -63,24 +63,27 @@
                                 {% if request.appointment_suggested == True and request.appointment_confirmed == False %}
                                     <p>{{ request.accepter }} has suggested an appointment to complete your request.</p>
                                     <p>Please Accept or Reject this an appointment at: {{ request.date_appointment }}</p>
-                                    <button value="accept" name="accept" type="submit" class="btn btn-link" id="accept" style="background: #48ad76; color: #F9F8F8;">Accept</button>
-                                    <button value="reject" name="reject" type="submit" class="btn btn-link" id="reject" style="background: #c69d3e; color: #F9F8F8;">Reject</button>
+                                    <button value="accept" name="accept" type="submit" class="btn btn-link" id="accept" style="background: #48ad76; color: #F9F8F8;"><i class="far fa-calendar-check"></i> Accept</button>
+                                    <button value="reject" name="reject" type="submit" class="btn btn-link" id="reject" style="background: #c69d3e; color: #F9F8F8;"><i class="far fa-calendar-minus"></i> Reject</button>
                                 {% endif %}
                                 {% if request.appointment_confirmed == True %}
-                                    <button value="cancel_appointment" name="cancel_appointment" type="submit" class="btn btn-link" id="cancel_appointment" style="background: #40a9cf; color: #F9F8F8;">Cancel Appointment</button>
+                                    <button value="cancel_appointment" name="cancel_appointment" type="submit" class="btn btn-link" id="cancel_appointment" style="background: #40a9cf; color: #F9F8F8;"><i class="far fa-calendar-minus"></i> Cancel Appointment</button>
                                 {% endif %}
                             </div>
                             <div class="form-group">
                                 {% if request.accepter != none %}
-                                    <button value="message" name="message" type="submit" class="btn btn-link" id="message" style="background: #1a2a67; color: #F9F8F8;">Message</button>
+                                    <button value="message" name="message" type="submit" class="btn btn-link" id="message" style="background: #1a2a67; color: #F9F8F8;"><i class="far fa-envelope"> Message</i></button>
                                 {% endif %}
-                                {% if request.appointment_confirmed == True %}
-                                    <button value="complete" name="complete" type="submit" class="btn btn-link" id="complete" style="background: #48ad76; color: #F9F8F8;">Complete</button>
-                                {% endif %}
+
                                 {% if request.status != "Incomplete" %}
-                                    <button value="cancel" name="cancel" type="submit" class="btn btn-link" id="cancel" style="background: #c69d3e; color: #F9F8F8;">Cancel</button>
+                                    <button value="cancel" name="cancel" type="submit" class="btn btn-link" id="cancel" style="background: #c69d3e; color: #F9F8F8;"><i class="fas fa-window-close"></i> Cancel</button>
                                 {% endif %}
-                                <button value="delete" name="delete" type="submit" class="btn btn-link" id="delete" style="background: #f44336; color: #F9F8F8;">Delete</button>
+                                <button value="delete" name="delete" type="submit" class="btn btn-link" id="delete" style="background: #f44336; color: #F9F8F8;"><i class="fas fa-trash-alt"></i> Delete</button>
+                                {% if request.appointment_confirmed == True %}
+                                    <div class="col-md-offset-2">
+                                        <p><br><button value="complete" name="complete" type="submit" class="btn btn-link" id="complete" style="background: #48ad76; color: #F9F8F8;"><i class="fas fa-check-square"></i> My Request is Complete!</button></p>
+                                    </div>
+                                {% endif %}
                             </div>
                         </form>
                     </div>
@@ -133,17 +136,17 @@
                             {% if request.appointment_suggested == False %}
                                 <label for="date_appointment">Schedule Appointment: </label>
                                 <input size="15px" type="text" id="id_date" name="new_date">
-                                <button value="schedule" name="schedule" type="submit" class="btn btn-link" style="background: #40a9cf; color: #F9F8F8;">Schedule</button>
+                                <button value="schedule" name="schedule" type="submit" class="btn btn-link" style="background: #40a9cf; color: #F9F8F8;"><i class="far fa-calendar-plus"></i></i> Schedule</button>
                             {% endif %}
 
                             {% if request.appointment_confirmed == True%}
-                                <button value="cancel_appointment" name="cancel_appointment" type="submit" class="btn btn-link" id="cancel_appointment" style="background: #40a9cf; color: #F9F8F8;">Cancel Appointment</button>
+                                <button value="cancel_appointment" name="cancel_appointment" type="submit" class="btn btn-link" id="cancel_appointment" style="background: #40a9cf; color: #F9F8F8;"><i class="far fa-calendar-minus"></i> Cancel Appointment</button>
                             {% endif %}
                             </div>
                             <div class="form-group">
-                                <button value="message" name="message" type="submit" class="btn btn-link" style="background: #1a2a67; color: #F9F8F8;">Message</button>
-                                <button value="cancel" name="cancel" type="submit" class="btn btn-link" style="background: #c69d3e; color: #F9F8F8;">Cancel Request</button>
-                                <button value="report" name="report" type="submit" class="btn btn-link" style="background: #f44336; color: #F9F8F8;">Report</button>
+                                <button value="message" name="message" type="submit" class="btn btn-link" style="background: #1a2a67; color: #F9F8F8;"><i class="far fa-envelope"></i> Message</button>
+                                <button value="cancel" name="cancel" type="submit" class="btn btn-link" style="background: #c69d3e; color: #F9F8F8;"><i class="fas fa-window-close"></i> Cancel</button>
+                                <button value="report" name="report" type="submit" class="btn btn-link" style="background: #f44336; color: #F9F8F8;"><i class="fas fa-flag"></i> Report</button>
                             </div>
                         </form>
                     </div>

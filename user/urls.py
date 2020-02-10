@@ -16,4 +16,6 @@ urlpatterns = [
     path('inbox', views.inbox, name='inbox'),
     path('non_profits', views.non_profits, name='non_profits'),
     path('api/', include(router.urls)),
+    path('support', views.support, name='support'),
+
 ]
