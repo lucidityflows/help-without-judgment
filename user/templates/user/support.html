@@ -1,0 +1,24 @@
+{% extends "user/base.html" %}
+{% load crispy_forms_tags %}
+{% block pageheader %} Create a Support Ticket {% endblock %}
+{% block content %}
+
+    <div container>
+        <form action="{% url 'support' %}" method = "POST" class = "col-lg-5 offset-3">
+            {% csrf_token %}
+
+            <div class = "form-group"> <label for="subject"> Subject</label>
+                {{ form.subject|as_crispy_field }}
+            </div>
+
+
+            <div class = "form-group"> <label for="Issue"> Issue </label>
+                 {{ form.body|as_crispy_field }}
+            </div>
+
+            <button type = "submit" class = "btn btn-link" style = "background: #40a9cf; color: #F9F8F8"> Submit </button>
+
+        </form>
+    </div>
+
+{% endblock content %}

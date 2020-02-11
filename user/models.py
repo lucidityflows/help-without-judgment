@@ -112,6 +112,15 @@ class SupportTicket(models.Model):
     status = models.CharField(max_length=100, default="In-Progress")
 
 
+class SupportTicketForm(ModelForm):
+
+    class Meta:
+        model = SupportTicket
+        fields = ['subject', 'body']
+        widgets = {'body': forms.Textarea}
+
+
+
 class Profile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)

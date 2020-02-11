@@ -19,6 +19,7 @@ import json
 from django.http import HttpResponse
 from rest_framework import viewsets
 from .serializers import RequestsSerializer, ProfileSerializer
+from .models import SupportTicketForm, SupportTicket
 
 # Create your views here.
 
@@ -406,5 +407,24 @@ def get_href_string(business_name):
 
 def support(request):
 
-    return render(request, 'user/support.html',)
+    if request.method == "POST":
+
+        form = SupportTicketForm(request.POST)
+
+        user = request.user
+
+        if form.is_valid():
+            subject = form.cleaned_data['subject']
+            body = form.cleaned_data['body']
+            supportTicket = form.save(commit=False)
+            supportTicket.user = user
+            supportTicket.save()
+
+            return HttpResponseRedirect('/')
+
+    else:
+        form = SupportTicketForm()
+        context = {'form': form}
+
+    return render(request, 'user/support.html', context)
 
