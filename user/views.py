@@ -407,24 +407,28 @@ def get_href_string(business_name):
 
 def support(request):
 
+    username = request.user
+
     if request.method == "POST":
 
         form = SupportTicketForm(request.POST)
-
-        user = request.user
 
         if form.is_valid():
             subject = form.cleaned_data['subject']
             body = form.cleaned_data['body']
             supportTicket = form.save(commit=False)
-            supportTicket.user = user
+            supportTicket.user = username
             supportTicket.save()
 
             return HttpResponseRedirect('/')
 
     else:
         form = SupportTicketForm()
-        context = {'form': form}
 
-    return render(request, 'user/support.html', context)
+        supportTickets = SupportTicket.objects.filter(user=username)
+
+        #form_context = {'form': form}
+        #supportTicket_context = {'supportTicket': supportTickets}
+
+    return render(request, 'user/support.html', {'form': form, 'supportTickets': supportTickets})
 

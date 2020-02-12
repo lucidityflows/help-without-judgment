@@ -110,6 +110,7 @@ class SupportTicket(models.Model):
     body = models.CharField(max_length=500)
     date_created = models.DateField(auto_now_add=True)
     status = models.CharField(max_length=100, default="In-Progress")
+    closing_action = models.CharField(max_length=200, default="")
 
 
 class SupportTicketForm(ModelForm):
