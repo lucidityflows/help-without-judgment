@@ -75,6 +75,10 @@ def index(request):
 
                 new_thread = Thread(first=user, second=other_user)
                 new_thread.save()
+                user.profile.other_user_count += 1
+                user.profile.save()
+                other_user.profile.other_user_count += 1
+                other_user.profile.save()
 
                 return_url = '/messages/' + str(other_user)
 
@@ -198,6 +202,9 @@ def open_requests(request):
         current_request.accepter = str(user)
         current_request.status = "Accepted"
         current_request.save()
+        user.profile.accepted_count += 1
+        user.profile.save()
+
 
         return HttpResponseRedirect('/')
 

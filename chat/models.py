@@ -57,6 +57,9 @@ class Thread(models.Model):
 
     objects = ThreadManager()
 
+    def __str__(self):
+        return f'Chat between {self.first} & {self.second}'
+
     @property
     def room_group_name(self):
         return f'chat_{self.id}'

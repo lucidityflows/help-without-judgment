@@ -111,6 +111,10 @@ class SupportTicket(models.Model):
     date_created = models.DateField(auto_now_add=True)
     status = models.CharField(max_length=100, default="In-Progress")
 
+    def __str__(self):
+
+        return f'Subject: {self.subject}'
+
 
 class SupportTicketForm(ModelForm):
 
@@ -118,7 +122,6 @@ class SupportTicketForm(ModelForm):
         model = SupportTicket
         fields = ['subject', 'body']
         widgets = {'body': forms.Textarea}
-
 
 
 class Profile(models.Model):
