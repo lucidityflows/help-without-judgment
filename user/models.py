@@ -105,7 +105,7 @@ class DateForm(forms.Form):
 
 class SupportTicket(models.Model):
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     subject = models.CharField(max_length=500)
     body = models.CharField(max_length=500)
     date_created = models.DateField(auto_now_add=True)

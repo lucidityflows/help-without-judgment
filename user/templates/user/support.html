@@ -9,23 +9,24 @@
         <hr class="my-4">
     <div class = "row">
         {% for supportTicket in supportTickets %}
+            <div class="col-sm-4 col-md-r">
             <div class="card">
-        <div class = "card-body" style="text-align: left;">
-            <p class = "card-text"> <strong> Subject: </strong> {{ supportTicket.subject }}</p>
-            <p class = "card-text"> <strong>Description: </strong> {{ supportTicket.body }}</p>
-            <p class = "card-text"> <strong> Status: </strong>{{ supportTicket.status }}</p>
-             <p class = "card-text"> <strong>Action:</strong> {{ supportTicket.closing_action }}</p>
-        </div>
+                <div class = "card-body" style="text-align: left;">
+                    <p class = "card-text"> <strong> Subject: </strong> {{ supportTicket.subject }}</p>
+                    <p class = "card-text"> <strong>Description: </strong> {{ supportTicket.body }}</p>
+                    <p class = "card-text"> <strong> Status: </strong>{{ supportTicket.status }}</p>
+                    <p class = "card-text"> <strong>Action:</strong> {{ supportTicket.closing_action }}</p>
+                </div>
             </div>
-
+            </div>
+        {% endfor %}
     </div>
-
-    {% endfor %}
+        <hr class="my-4">
     {% endif %}
 
 
-    <div container><br>
-    <h3>Create a Support Ticket</h3>
+    <div class="container">
+    <h4>Create a Support Ticket</h4>
         <hr class="my-4">
         <form action="{% url 'support' %}" method = "POST" class = "col-lg-5 offset-3">
             {% csrf_token %}

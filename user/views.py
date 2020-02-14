@@ -414,7 +414,7 @@ def get_href_string(business_name):
 
 def support(request):
 
-    username = request.user
+    user = request.user
 
     if request.method == "POST":
 
@@ -424,7 +424,7 @@ def support(request):
             subject = form.cleaned_data['subject']
             body = form.cleaned_data['body']
             supportTicket = form.save(commit=False)
-            supportTicket.user = username
+            supportTicket.user = user
             supportTicket.save()
 
             return HttpResponseRedirect('/')
@@ -432,7 +432,7 @@ def support(request):
     else:
         form = SupportTicketForm()
 
-        supportTickets = SupportTicket.objects.filter(user=username)
+        supportTickets = SupportTicket.objects.filter(user=user)
 
         #form_context = {'form': form}
         #supportTicket_context = {'supportTicket': supportTickets}
