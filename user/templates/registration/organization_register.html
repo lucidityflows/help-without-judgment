@@ -1,0 +1,73 @@
+{% load crispy_forms_tags %}
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Help Without Judgment - Org. Registration Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+    <style>
+        .container
+        {
+            font-family: 'Helvetica','Arial', sans-serif;
+        }
+
+        body
+        {
+            font-family: 'Helvetica','Arial', sans-serif;
+        }
+
+        label {
+            color: #F9F8F8;
+        }
+
+        #hint_id_username, #hint_id_password1, #hint_id_password2{
+            display: none;
+        }
+
+        .asteriskField {
+            display: none;
+        }
+
+
+    </style>
+</head>
+
+<body style="background-color: #42A1C9;">
+<div id="register">
+    <div id="logo" align="center">
+        <img src="../../static/registration/images/logo.png"  height="150x" width="150px" alt="HWJ_logo.png">
+    </div>
+    <h3 class="text-center text-white pt-5">Help Without Judgment</h3>
+    <div class="container">
+        <div id="login-row" class="row justify-content-center align-items-center">
+            <div id="login-column" class="col-md-4">
+                <div id="login-box" class="col-md-12">
+
+                    <form method="POST" class="form" action="{% url 'organization_register' %}">
+                        {% csrf_token %}
+
+                        <h3 class="text-center text-white">Organization Register</h3><br>
+                        <div align="center">
+                            {{ form|crispy }}
+                        </div>
+                        <!-- Submit -->
+                        <div class="form-group" align="center">
+                            <br><input type="submit" name="submit" class="btn btn-secondary btn-md btn-block" style="background-color: #795A63; color:#F9F8F8;" value="Register">
+                        </div>
+
+                        <div class="form-group" align="center">
+                            <a href="{% url 'login' %}" class="text-white">Already Registered? Login Here</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

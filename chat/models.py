@@ -4,6 +4,8 @@ from django.db import models
 from django.db.models import Q
 from django.contrib.auth.models import User
 from user.models import Profile
+import re
+from django.contrib import admin
 
 
 class ThreadManager(models.Manager):
@@ -72,9 +74,56 @@ class Thread(models.Model):
         return False
 
 
+CHAT_STATUS_CHOICES = [
+    ('n', 'New'),
+    ('c', 'Clean'),
+    ('i', 'Inappropriate'),
+]
+
+
 class ChatMessage(models.Model):
     thread = models.ForeignKey(Thread, null=True, blank=True, on_delete=models.SET_NULL)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='sender', on_delete=models.CASCADE)
     message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=1, choices=CHAT_STATUS_CHOICES, default='n')
+
+
+def check_message(message):
+
+    phone_number_regex = "\(\w{3}\)\w{3}-\w{4}"
+
+    email_regex = "(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
+
+    if re.search(email_regex, message) or re.search(phone_number_regex, message):
+
+        ret_value = 'i'
+        return ret_value
+
+    else:
+
+        ret_value = 'c'
+        return ret_value
+
+
+def search_messages():
+
+    query_all_messages = ThreadManager.ChatMessage.objects.all()
+
+    phone_number_regex= "\(\w{3}\)\w{3}-\w{4}"
+
+    email_regex = "(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
+
+    for message in query_all_messages:
+
+        if re.search(email_regex, message) or re.search(phone_number_regex, message):
+
+            return 'i'
+
+        else:
+
+            return 'c'
+
+
+
 

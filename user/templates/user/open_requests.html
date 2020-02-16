@@ -3,6 +3,9 @@
 {% block pageheader %}View Open Requests{% endblock %}
 
 {% block content %}
+    {% if user.profile.is_organization == True and user.profile.is_verified == False %}
+    <h3> You cannot view/accept requests until your organization account is verified!</h3>
+    {% else %}
     <div class="row">
         {% for request in requests %}
             <div class="col-sm-4 col-md-r">
@@ -42,4 +45,5 @@
             </div>
         {% endfor %}
         </div>
+    {% endif %}
 {% endblock content %}

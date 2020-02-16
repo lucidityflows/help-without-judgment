@@ -36,8 +36,9 @@ class Requests(models.Model):
     appointment_suggested = models.BooleanField(default=False)
     requester = models.ForeignKey(User, on_delete=models.CASCADE)
     accepter = models.CharField(max_length=150, null=True)
-    accepter_feedback = models.CharField(max_length=250, default='None')
-    requester_feedback = models.CharField(max_length=250, default='None')
+    accepter_is_verified = models.BooleanField(default=False)
+    accepter_rated_positive = models.BooleanField(null=True)
+    requester_rated_positive = models.BooleanField(null=True)
     reported = models.BooleanField(default=False)
 
     def __str__(self):
@@ -103,14 +104,21 @@ class DateForm(forms.Form):
     date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M', ''], required=False)
 
 
+SUPPORT_TICKET_STATUS = [
+    ('p', 'Pending'),
+    ('i', 'In-Progress'),
+    ('c', 'Closed'),
+]
+
+
 class SupportTicket(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     subject = models.CharField(max_length=500)
     body = models.CharField(max_length=500)
     date_created = models.DateField(auto_now_add=True)
-    status = models.CharField(max_length=100, default="In-Progress")
-    closing_action = models.CharField(max_length=200, default="")
+    status = models.CharField(max_length=1, choices=SUPPORT_TICKET_STATUS, default='p')
+    closing_action = models.CharField(max_length=200, default="This issue is still being processed. Check for updates later.")
 
     def __str__(self):
 
@@ -136,8 +144,12 @@ class Profile(models.Model):
     canceled_count = models.IntegerField(default=0)
     other_user_count = models.IntegerField(default=0)
     reported_count = models.IntegerField(default=0)
+    positive_feedback_count = models.IntegerField(default=0)
+    negative_feedback_count = models.IntegerField(default=0)
     user_anniversary = models.DateField(auto_now_add=True)
     is_moderator = models.BooleanField(default=False)
+    is_organization = models.BooleanField(default=False)
+    is_verified = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.user.username} Profile'

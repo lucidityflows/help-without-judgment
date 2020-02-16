@@ -4,6 +4,9 @@ from django.http import Http404, HttpResponseForbidden
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic.edit import FormMixin
+from django.conf import settings
+from django.db import models
+from .models import *
 
 from django.views.generic import DetailView, ListView
 
@@ -56,7 +59,9 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
         thread = self.get_object()
         user = self.request.user
         message = form.cleaned_data.get("message")
-        ChatMessage.objects.create(user=user, thread=thread, message=message)
+        new_message = ChatMessage.objects.create(user=user, thread=thread, message=message)
+        thread.updated = models.DateTimeField(auto_now=True)
+        thread.save()
         return super().form_valid(form)
 
 

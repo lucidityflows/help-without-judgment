@@ -52,19 +52,21 @@
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Created', 'Accepted', 'Completed', 'Canceled', 'Deleted', 'User Contacts'],
+            labels: ['Created', 'Accepted', 'Completed', 'Canceled', 'Deleted', 'Users Messaged', 'Positive Feedback', 'Negative Feedback'],
             datasets: [{
                 label: 'User Stats',
                 data: [{{ user.profile.created_count }}, {{ user.profile.accepted_count }},
                     {{ user.profile.completed_count }}, {{ user.profile.canceled_count }}, {{ user.profile.deleted_count }},
-                    {{ user.profile.other_user_count }}],
+                    {{ user.profile.other_user_count }}, {{ user.profile.positive_feedback_count }}, {{ user.profile.negative_feedback_count }}],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
                     'rgba(255, 206, 86, 0.2)',
                     'rgba(75, 192, 192, 0.2)',
                     'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
                 ],
                 borderColor: [
                     'rgba(255, 99, 132, 1)',
@@ -72,7 +74,9 @@
                     'rgba(255, 206, 86, 1)',
                     'rgba(75, 192, 192, 1)',
                     'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
                 ],
                 borderWidth: 1
             }]

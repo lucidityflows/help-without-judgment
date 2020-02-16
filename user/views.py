@@ -1,25 +1,18 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
-from .models import Requests, Profile
+from .models import Requests, Profile, SupportTicketForm, SupportTicket
 from .models import RequestForm, AcceptRequestForm, CancelRequestForm, CloseRequestForm, DeleteRequestForm, \
     ScheduleAppointmentForm, DateForm, ConfirmAppointmentForm
 from django.http import HttpResponseRedirect
-from itertools import chain
 from datetime import datetime
-from django.utils import timezone
 from chat.models import Thread
-from django import forms
-from .forms import ProfileUpdateForm, UserUpdateForm
+from .forms import ProfileUpdateForm
 from django.contrib.auth.models import User
 import requests
-import json
-from django.http import HttpResponse
 from rest_framework import viewsets
 from .serializers import RequestsSerializer, ProfileSerializer
-from .models import SupportTicketForm, SupportTicket
 
 # Create your views here.
 
@@ -41,6 +34,7 @@ def index(request):
             current_request.accepter = None
             current_request.status = "Incomplete"
             current_request.appointment_suggested = False
+            current_request.accepter_is_verified = False
             current_request.save()
             user.profile.canceled_count += 1
             user.profile.save()
@@ -175,6 +169,34 @@ def register(request):
     return render(request, 'registration/register.html', context)
 
 
+def organization_register(request):
+
+    if request.method == "POST":
+
+        form = UserCreationForm(request.POST)
+
+        if form.is_valid():
+
+            form.save()
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password1']
+            user = authenticate(username=username, password=password)
+
+            user.profile.is_organization = True
+            user.profile.save()
+            login(request, user)
+
+            return redirect('index')
+
+    else:
+
+        form = UserCreationForm()
+
+    context = {'form': form}
+
+    return render(request, 'registration/organization_register.html', context)
+
+
 @login_required(login_url='/accounts/login/')
 def open_requests(request):
 
@@ -200,6 +222,11 @@ def open_requests(request):
 
         current_request = Requests.objects.get(pk=primary_key)
         current_request.accepter = str(user)
+
+        if user.profile.is_verified:
+
+            current_request.accepter_is_verified = True
+
         current_request.status = "Accepted"
         current_request.save()
         user.profile.accepted_count += 1
@@ -248,29 +275,65 @@ def create_request(request):
 @login_required(login_url='/accounts/login/')
 def past_requests(request):
 
+    user = request.user
+
     if request.method == "POST":
 
-        if request.POST['button'] == "accepter_feedback":
+        #if request.POST['button'] == "positive_feedback":
+        if 'positive_feedback' in request.POST:
 
-            feedback = request.POST['feedback_response']
-
-            primary_key = request.POST["primary_key"]
-            primary_key = int(primary_key)
-
-            current_request = Requests.objects.get(pk=primary_key)
-            current_request.accepter_feedback = feedback
-            current_request.save()
-
-        if request.POST['button'] == "requester_feedback":
-
-            feedback = request.POST['feedback_response']
+            #feedback = request.POST['feedback_response']
 
             primary_key = request.POST["primary_key"]
             primary_key = int(primary_key)
 
             current_request = Requests.objects.get(pk=primary_key)
-            current_request.requester_feedback = feedback
-            current_request.save()
+
+            if current_request.requester == user:
+
+                current_request.accepter_rated_positive = True
+                current_request.save()
+
+                other_user = User.objects.get(username=current_request.accepter)
+                other_user.profile.positive_feedback_count += 1
+                other_user.profile.save()
+
+            else:
+
+                current_request.requester_rated_positive = True
+                current_request.save()
+
+                other_user = User.objects.get(username=current_request.requester)
+                other_user.profile.positive_feedback_count += 1
+                other_user.profile.save()
+
+        #if request.POST['button'] == "requester_feedback":
+        if 'negative_feedback' in request.POST:
+
+            #feedback = request.POST['feedback_response']
+
+            primary_key = request.POST["primary_key"]
+            primary_key = int(primary_key)
+
+            current_request = Requests.objects.get(pk=primary_key)
+
+            if current_request.requester == user:
+
+                current_request.accepter_rated_positive = False
+                current_request.save()
+
+                other_user = User.objects.filter(username=current_request.accepter)
+                other_user.profile.negative_feedback_count += 1
+                other_user.profile.save()
+
+            else:
+
+                current_request.requester_rated_positive = False
+                current_request.save()
+
+                other_user = Requests.objects.filter(username=current_request.requester)
+                other_user.profile.negative_feedback_count += 1
+                other_user.profile.save()
 
         return render(request, 'user/index.html')
 
@@ -278,8 +341,8 @@ def past_requests(request):
 
         user = request.user
 
-        past_accepter_query_list = Requests.objects.filter(requester=user, status="Complete")
-        past_requester_query_list = Requests.objects.filter(accepter=user, status="Complete")
+        past_requester_query_list = Requests.objects.filter(requester=user, status="Complete")
+        past_accepter_query_list = Requests.objects.filter(accepter=user, status="Complete")
 
         #context = past_accepter_query_list | past_requester_query_list
         #context = {'requests': context}
@@ -421,6 +484,7 @@ def support(request):
         form = SupportTicketForm(request.POST)
 
         if form.is_valid():
+
             subject = form.cleaned_data['subject']
             body = form.cleaned_data['body']
             supportTicket = form.save(commit=False)
@@ -430,6 +494,7 @@ def support(request):
             return HttpResponseRedirect('/')
 
     else:
+
         form = SupportTicketForm()
 
         supportTickets = SupportTicket.objects.filter(user=user)

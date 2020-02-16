@@ -44,16 +44,20 @@
                         <p><strong>Type: </strong>{{ request.type }}</p>
                         <p><strong>Description: </strong>{{ request.description }}</p>
                         <p><strong>Created On: </strong>{{ request.date_created|date:"F d, Y" }}</p>
-                        <p><strong>Accepted By: {{ request.accepter }}</strong></p>
+                    {% if request.accepter_is_verified %}
+                        <p><strong>Accepted By: </strong>{{ request.accepter }} <strong><span style="color: #1C437F">(Trusted User)</span></strong></p>
+                    {% else %}
+                        <p><strong>Accepted By: </strong>{{ request.accepter }}</p>
+                    {% endif %}
 
                         {% if request.appointment_confirmed == True %}
                             <p><strong>Appointment: </strong>{{ request.date_appointment }} (Confirmed)</p>
 
                         {% elif request.status != "Incomplete" and request.appointment_suggested == False%}
-                            <p><strong>Appointment: {{ request.accepter }} has not suggested an appointment.</strong></p>
+                            <p><strong>Appointment: </strong>{{ request.accepter }} has not suggested an appointment.</p>
 
                         {% elif request.status == "Incomplete"%}
-                            <p><strong>Appointment: Your request is still awaiting an accepter.</strong></p>
+                            <p><strong>Appointment: </strong> Your request is still awaiting an accepter.</p>
                         {% endif %}
 
                         <form action= "{% url 'index' %}" method="POST" class="form" id="user_is_requester">
@@ -91,7 +95,7 @@
             </div>
         {% endfor %}
     </div>
-    {% else %}
+    {% elif user.profile.is_organization == False %}
     <h4> You do not have any open service requests. </h4>
     <hr class="my-4">
     {% endif %}

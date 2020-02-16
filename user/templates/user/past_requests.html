@@ -3,7 +3,7 @@
 {% block pageheader %}View Past Requests{% endblock %}
 
 {% block content %}
-    {% if created_requests.count > 0 %}
+    {% if created_requests.count > 0 and user.profile.is_organization == False %}
     <h4> You created the following past Service Requests </h4>
     <hr class="my-4">
     <div class="row">
@@ -28,32 +28,33 @@
                         <p><strong>Requested By: </strong>{{ request.requester }}</p>
                         <p><strong>Description: </strong>{{ request.description }}</p>
                         <p><strong>Created On: </strong>{{ request.date_created|date:"F d, Y" }}</p>
-                        <p><strong>Accepted By: {{ request.accepter }}</strong></p>
+                        <p><strong>Accepted By: </strong>{{ request.accepter }}</p>
                         <p><strong>Appointment Date: </strong>{{ request.date_appointment }}</p>
                         <p><strong>Completed On: </strong>{{ request.date_completed|date:"F d, Y" }}</p>
 
-                        {% if request.requester_feedback == 'None' %}
+                        {% if request.accepter_rated_positive == null %}
                             <div class="empty-form">
                                 <form action = "{% url 'past_requests' %}" method="POST" class="form" id="feedback">
                                     {% csrf_token %}
                                     <div class="form-group">
-                                        <label for="request_type">Please tell us about your experience:</label>
-                                        <input type="text" name="feedback_response">
+                                        <label for="request_type">Rate your interaction with <strong>{{ request.requester }}</strong>:</label>
                                     </div>
                                     <input type="hidden" name="primary_key" value="{{ request.pk }}">
-                                    <input type="hidden" name="button" id="requester_feedback" value="requester_feedback">
-                                    <button type="submit" class="btn btn-link" style="background: #48ad76; color: #F9F8F8;">Submit Feedback</button>
+                                    <button value="positive_feedback" name="positive_feedback" type="submit" class="btn btn-link" style="background: #48ad76; color: #F9F8F8;"><i class="fas fa-thumbs-up"></i> Positive</button>
+                                    <button value="negative_feedback" name="negative_feedback" type="submit" class="btn btn-link" style="background: #f44336; color: #F9F8F8;"><i class="fas fa-thumbs-down"></i> Negative</button>
                                 </form>
                             </div>
+                        {% elif request.accepter_rated_positive == True %}
+                            <p><strong>Feedback on {{ request.accepter }}: </strong>Positive </p>
                         {% else %}
-                            <p><strong>Feedback: </strong> {{ request.requester_feedback }} </p>
+                            <p><strong>Feedback on {{ request.accepter }}: </strong>Negative </p>
                         {% endif %}
                     </div>
                 </div>
             </div>
         {% endfor %}
     </div>
-    {% else %}
+    {% elif user.profile.is_organization == False %}
     <h4> You have not created any past Service Requests. </h4>
     <hr class="my-4">
     {% endif %}
@@ -84,25 +85,26 @@
                         <p><strong>Requested By: </strong>{{ request.requester }}</p>
                         <p><strong>Description: </strong>{{ request.description }}</p>
                         <p><strong>Created On: </strong>{{ request.date_created|date:"F d, Y" }}</p>
-                        <p><strong>Accepted By: {{ request.accepter }}</strong></p>
+                        <p><strong>Accepted By: </strong>{{ request.accepter }}</p>
                         <p><strong>Appointment Date: </strong>{{ request.date_appointment }}</p>
                         <p><strong>Completed On: </strong>{{ request.date_completed|date:"F d, Y" }}</p>
 
-                        {% if request.accepter_feedback == 'None' %}
+                        {% if request.requester_rated_positive == null %}
                             <div class="empty-form">
                                 <form action = "{% url 'past_requests' %}" method="POST" class="form" id="feedback">
                                     {% csrf_token %}
                                     <div class="form-group">
-                                        <label for="request_type">Please tell us about your experience:</label>
-                                        <input type="text" name="feedback_response">
+                                        <label for="request_type">Rate your interaction with <strong>{{ request.accepter }}</strong>:</label>
                                     </div>
                                     <input type="hidden" name="primary_key" value="{{ request.pk }}">
-                                    <input type="hidden" name="button" id="accepter_feedback" value="accepter_feedback">
-                                    <button type="submit" class="btn btn-success">Submit Feedback</button>
+                                    <button value="positive_feedback" name="positive_feedback" type="submit" class="btn btn-link" style="background: #48ad76; color: #F9F8F8;"><i class="fas fa-thumbs-up"></i> Positive</button>
+                                    <button value="negative_feedback" name="negative_feedback" type="submit" class="btn btn-link" style="background: #f44336; color: #F9F8F8;"><i class="fas fa-thumbs-down"></i> Negative</button>
                                 </form>
                             </div>
+                        {% elif request.requester_rated_positive == True %}
+                            <p><strong>Feedback on {{ request.requester }}: </strong>Positive</p>
                         {% else %}
-                            <p><strong>Feedback: </strong> {{ request.accepter_feedback }}</p>
+                            <p><strong>Feedback on {{ request.requester }}: </strong>Negative</p>
                         {% endif %}
                     </div>
                 </div>

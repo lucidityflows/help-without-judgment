@@ -4,6 +4,9 @@
 {% block pageheader %}Create a New Service Request{% endblock %}
 
 {% block content %}
+    {% if user.profile.is_organization == True %}
+    <h2>Organizations are not able to create service requests!</h2>
+    {% else %}
     <div class="container">
         <form action= "{% url 'create_request' %}" method="POST" class="col-lg-5 offset-lg-3">
 
@@ -20,5 +23,6 @@
             <button type="submit" class="btn btn-link" style="background: #40a9cf; color: #F9F8F8;">Submit</button>
         </form>
     </div>
+    {% endif %}
 
 {% endblock content %}
