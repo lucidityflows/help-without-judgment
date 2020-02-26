@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous">
     <script type="text/javascript" src='http://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js'></script>
 	<style>
+
 		.container
 		{
 			font-family: 'Helvetica','Arial', sans-serif;
@@ -38,9 +39,9 @@
         #chat-items ul
 		{
  			background-color: white;
-    		max-height:120px;/*The important part*/
-    		overflow:scroll;
-    		-webkit-overflow-scrolling:touch;
+    		max-height: 120px;/*The important part*/
+    		overflow: scroll;
+    		-webkit-overflow-scrolling: touch;
  		}
 
         #chat-items li
@@ -52,6 +53,12 @@
         {
             color: #F9F8F8;
 
+        }
+
+        .table td
+        {
+            color: #1a2a67;
+            vertical-align: middle;
         }
 
         .table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th
@@ -66,7 +73,7 @@
 
         .table a
         {
-            color: #F9F8F8;
+            color: #1a2a67;
         }
 
         .asteriskField
@@ -79,14 +86,38 @@
             display: none;
         }
 
+        .thumbnail
+        {
+            padding-bottom: 30px;
+        }
+
+        .card-img
+        {
+            width: 350px;
+            height: 250px;
+        }
+
+        .caption h3
+        {
+            padding-top: 10px;
+        }
+
+        .caption p
+        {
+            text-align: left;
+            padding-left: 25px;
+        }
+
 	</style>
 
     <script>
+
         $(function()
         {
             $("#id_date").datetimepicker();
             format: 'YYYY-MM-DD HH:MM'
         });
+
     </script>
 </head>
 

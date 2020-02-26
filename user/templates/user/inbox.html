@@ -13,31 +13,40 @@
     {% if messages.count > 0 %}
         <h4> These are your current conversations </h4>
         <hr class="my-4">
-        <div class="row">
+        <!-- Table Starts Here -->
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr style="background-color: #1a2a67;">
+                <th style="width: 20%" scope="col"><h4>Profile Image</h4></th>
+                <th style="width: 30%" scope="col"><h4>Username</h4></th>
+                <th style="width: 25%" scope="col"><h4>Date Began</h4></th>
+                <th style="width: 25%" scope="col"><h4>Last Message</h4></th>
+                <!-- <th style="width: 20%" scope="col"><h4>Message</h4></th> -->
+                <!--<th style="width: 20%" scope="col"><h4>Website</h4></th>-->
+            </tr>
+            </thead>
             {% for message in messages %}
                 {% if message.first == user %}
-                    <div class="col-sm-4 col-md-r">
-                        <div class="card" style="width: 18rem;">
-                            <a id="message_url" href="/messages/{{ message.second.username }}"><img src="{{ message.second.profile.image.url }}" class="card-img-top" width="300px" height="250px" alt="profile_image"></a>
-                            <div class="card-body">
-                                <p class="card-text">Conversation with {{ message.second }}</p>
-                                <p class="card-text">Last Message: {{ message.updated }}</p>
-                            </div>
-                        </div>
-                    </div>
+                    <tr style="vertical-align: middle;">
+                    <th scope="row"><a href="/messages/{{ message.second.username }}"><img src="{{ message.second.profile.image.url }}" class="rounded-circle z-depth-0" alt="avatar image" width="100px" height="100px"> </a></th>
+                        <td><a href="/messages/{{ message.second.username }}"><h5>{{ message.second.username }}</h5></a></td>
+                        <td><a href="/messages/{{ message.second.username }}"><h5>{{ message.timestamp }}</h5></a></td>
+                        <!--<td><a href="/messages/{{ message.second.username }}"><h5>{{ message.updated }}</h5></a></td> -->
+                        <td><a href="/messages/{{ message.second.username }}"><h5> {{ message.chatmessage_set.last.timestamp }}  </h5></a></td>
+                    </tr>
                 {% else %}
-                    <div class="col-sm-4 col-md-r">
-                        <div class="card" style="width: 18rem;">
-                            <a href="/messages/{{ message.first.username }}"><img src="{{ message.first.profile.image.url }}" class="card-img-top" width="300px" height="250px" alt="profile_image"></a>
-                            <div class="card-body">
-                                <p class="card-text">Conversation with {{ message.first }}</p>
-                                <p class="card-text">Last Message: {{ message.updated }}</p>
-                            </div>
-                        </div>
-                    </div>
+                    <tr>
+                    <th scope="row"><a href="/messages/{{ message.first.username }}"><img src="{{ message.first.profile.image.url }}" class="rounded-circle z-depth-0" alt="avatar image" width="100px" height="100px"> </a></th>
+                        <td><a href="/messages/{{ message.first.username }}"><h5>{{ message.first.username }}</h5></a></td>
+                        <td><a href="/messages/{{ message.first.username }}"><h5>{{ message.timestamp }}</h5></a></td>
+                        <!--<td><a href="/messages/{{ message.first.username }}"><h5>{{ message.updated }}</h5></a></td>-->
+                        <td><a href="/messages/{{ message.first.username }}"><h5> {{ message.chatmessage_set.last.timestamp }}  </h5></a></td>
+                    </tr>
                 {% endif %}
             {% endfor %}
-        </div>
+        </table>
+        <!-- Table Ends Here -->
+
     {% else %}
         <h4> You do not currently have any conversations in your Inbox.</h4>
     {% endif %}

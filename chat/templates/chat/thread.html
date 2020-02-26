@@ -21,9 +21,15 @@
 </style>
 {% block pageheader %}
     {% if user != object.first %}
-        Your conversation with {{ object.first }}
+        Chat with {{ object.first }}
+        {% if object.first.profile.is_verified %}
+            <h4><strong><span style="color: #1C437F"><i class="fas fa-star"></i> Trusted User</span></strong></h4>
+        {% endif %}
     {% else %}
-        Your conversation with {{ object.second }}
+        Chat with {{ object.second }}
+        {% if object.second.profile.is_verified %}
+            <h4><strong><span style="color: #1C437F"><i class="fas fa-star"></i> Trusted User</span></strong></h4>
+        {% endif %}
     {% endif %}
 {% endblock pageheader%}
 
@@ -31,10 +37,19 @@
 <ul style="text-align: left;" id='chat-items'>
 {% for chat in object.chatmessage_set.all %}
 
-<li>
-    <img src="{{ chat.user.profile.image.url }}" class="rounded-circle z-depth-0" alt="avatar image" width="50px" height="50px">
-    <b>{{ chat.user }}:</b> {{ chat.message }}
-</li><br>
+    {% if chat.user.profile.is_moderator %}
+    <li>
+        <img src="{{ chat.user.profile.image.url }}" class="rounded-circle z-depth-0" alt="avatar image" width="50px" height="50px">
+        <b>{{ chat.user }}:</b> <span style="color: #f44336;"> {{ chat.message }} </span>
+    </li><br>
+    {% else %}
+    <li>
+        <img src="{{ chat.user.profile.image.url }}" class="rounded-circle z-depth-0" alt="avatar image" width="50px" height="50px">
+        <b>{{ chat.user }}:</b> {{ chat.message }}
+    </li><br>
+    {% endif %}
+
+
 
 {% endfor %}
 </ul>

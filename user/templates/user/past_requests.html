@@ -4,7 +4,7 @@
 
 {% block content %}
     {% if created_requests.count > 0 and user.profile.is_organization == False %}
-    <h4> You created the following past Service Requests </h4>
+    <h4> You created the following Requests (Completed)</h4>
     <hr class="my-4">
     <div class="row">
         {% for request in created_requests %}
@@ -61,7 +61,7 @@
 
     <hr class="my-4">
     {% if accepted_requests.count > 0 %}
-    <h4> You have accepted the following past Service Requests </h4>
+    <h4> You have accepted the following Requests (Completed)</h4>
     <hr class="my-4">
         <div class="row">
         {% for request in accepted_requests %}
@@ -94,7 +94,7 @@
                                 <form action = "{% url 'past_requests' %}" method="POST" class="form" id="feedback">
                                     {% csrf_token %}
                                     <div class="form-group">
-                                        <label for="request_type">Rate your interaction with <strong>{{ request.accepter }}</strong>:</label>
+                                        <label for="request_type">Rate your interaction with <strong>{{ request.requester }}</strong>:</label>
                                     </div>
                                     <input type="hidden" name="primary_key" value="{{ request.pk }}">
                                     <button value="positive_feedback" name="positive_feedback" type="submit" class="btn btn-link" style="background: #48ad76; color: #F9F8F8;"><i class="fas fa-thumbs-up"></i> Positive</button>
@@ -112,7 +112,7 @@
         {% endfor %}
         </div>
     {% else %}
-    <h4> You have not accepted any past Service Requests. </h4>
+    <h4> You have not completed any Requests. </h4>
     <hr class="my-4">
     {% endif %}
 

@@ -7,6 +7,7 @@ from django.views.generic.edit import FormMixin
 from django.conf import settings
 from django.db import models
 from .models import *
+from _datetime import datetime
 
 from django.views.generic import DetailView, ListView
 
@@ -45,6 +46,7 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
         context['form'] = self.get_form()
         return context
 
+
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return HttpResponseForbidden()
@@ -60,7 +62,8 @@ class ThreadView(LoginRequiredMixin, FormMixin, DetailView):
         user = self.request.user
         message = form.cleaned_data.get("message")
         new_message = ChatMessage.objects.create(user=user, thread=thread, message=message)
-        thread.updated = models.DateTimeField(auto_now=True)
+        updated_time = datetime.now()
+        thread.updated = new_message.timestamp
         thread.save()
         return super().form_valid(form)
 

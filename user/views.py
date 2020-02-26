@@ -69,9 +69,9 @@ def index(request):
 
                 new_thread = Thread(first=user, second=other_user)
                 new_thread.save()
-                user.profile.other_user_count += 1
+                user.profile.other_user_messaged_count += 1
                 user.profile.save()
-                other_user.profile.other_user_count += 1
+                other_user.profile.other_user_messaged_count += 1
                 other_user.profile.save()
 
                 return_url = '/messages/' + str(other_user)
@@ -322,7 +322,7 @@ def past_requests(request):
                 current_request.accepter_rated_positive = False
                 current_request.save()
 
-                other_user = User.objects.filter(username=current_request.accepter)
+                other_user = User.objects.get(username=current_request.accepter)
                 other_user.profile.negative_feedback_count += 1
                 other_user.profile.save()
 
@@ -331,7 +331,7 @@ def past_requests(request):
                 current_request.requester_rated_positive = False
                 current_request.save()
 
-                other_user = Requests.objects.filter(username=current_request.requester)
+                other_user = User.objects.get(username=current_request.requester)
                 other_user.profile.negative_feedback_count += 1
                 other_user.profile.save()
 

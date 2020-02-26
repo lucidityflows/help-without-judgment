@@ -52,6 +52,7 @@ class ThreadManager(models.Manager):
 
 
 class Thread(models.Model):
+
     first = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='chat_thread_first')
     second = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='chat_thread_second')
     updated = models.DateTimeField(auto_now=True)
@@ -82,6 +83,7 @@ CHAT_STATUS_CHOICES = [
 
 
 class ChatMessage(models.Model):
+
     thread = models.ForeignKey(Thread, null=True, blank=True, on_delete=models.SET_NULL)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='sender', on_delete=models.CASCADE)
     message = models.TextField()

@@ -2,6 +2,7 @@ import json
 from django.contrib.auth import get_user_model
 from channels.consumer import SyncConsumer, AsyncConsumer
 from channels.db import database_sync_to_async
+from datetime import datetime
 
 from .models import Thread, ChatMessage
 
@@ -76,5 +77,6 @@ class ChatConsumer(AsyncConsumer):
 	@database_sync_to_async
 	def create_chat_message(self, user, message):
 		thread = self.cfe_chat_thread
+		thread.updated = datetime.now()
 		return ChatMessage.objects.create(thread=thread, user=user, message=message)
 

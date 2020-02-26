@@ -118,7 +118,7 @@ class SupportTicket(models.Model):
     body = models.CharField(max_length=500)
     date_created = models.DateField(auto_now_add=True)
     status = models.CharField(max_length=1, choices=SUPPORT_TICKET_STATUS, default='p')
-    closing_action = models.CharField(max_length=200, default="This issue is still being processed. Check for updates later.")
+    support_comment = models.CharField(max_length=200, default="This issue is still being processed. Check for updates later.")
 
     def __str__(self):
 
@@ -142,7 +142,7 @@ class Profile(models.Model):
     deleted_count = models.IntegerField(default=0)
     completed_count = models.IntegerField(default=0)
     canceled_count = models.IntegerField(default=0)
-    other_user_count = models.IntegerField(default=0)
+    other_user_messaged_count = models.IntegerField(default=0)
     reported_count = models.IntegerField(default=0)
     positive_feedback_count = models.IntegerField(default=0)
     negative_feedback_count = models.IntegerField(default=0)
