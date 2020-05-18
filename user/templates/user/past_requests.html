@@ -4,116 +4,116 @@
 
 {% block content %}
     {% if created_requests.count > 0 and user.profile.is_organization == False %}
-    <h4> You created the following Requests (Completed)</h4>
-    <hr class="my-4">
-    <div class="row">
-        {% for request in created_requests %}
-            <div class="col-sm-4 col-md-r">
-                <div class="thumbnail">
-                    {% if request.type == 'Furniture Service' %}
-                    <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/furniture_request_default_image.jpg" alt="furniture_request_default_image.jpg">
-                    {% elif request.type == 'Food Service' %}
-                    <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/food_request_default_image.jpg" alt="food_request_default_image.jpg">
-                    {% elif request.type == 'Clothing Service' %}
-                    <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/clothing_request_default_image.jpg" alt="clothing_request_default_image.jpg">
-                    {% elif request.type == 'Interpreter Service' %}
-                    <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/interpreter_request_default_image.png" alt="interpreter_request_default_image.jpg">
-                    {% elif request.type == 'Transportation Service' %}
-                    <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/transportation_request_default_image.jpg" alt="transportation_request_default_image.jpg">
-                    {% endif %}
-
-                    <div class="caption">
-                        <h3><strong>Status: </strong>{{ request.status }}</h3>
-                        <p><strong>Type: </strong>{{ request.type }}</p>
-                        <p><strong>Requested By: </strong>{{ request.requester }}</p>
-                        <p><strong>Description: </strong>{{ request.description }}</p>
-                        <p><strong>Created On: </strong>{{ request.date_created|date:"F d, Y" }}</p>
-                        <p><strong>Accepted By: </strong>{{ request.accepter }}</p>
-                        <p><strong>Appointment Date: </strong>{{ request.date_appointment }}</p>
-                        <p><strong>Completed On: </strong>{{ request.date_completed|date:"F d, Y" }}</p>
-
-                        {% if request.accepter_rated_positive == null %}
-                            <div class="empty-form">
-                                <form action = "{% url 'past_requests' %}" method="POST" class="form" id="feedback">
-                                    {% csrf_token %}
-                                    <div class="form-group">
-                                        <label for="request_type">Rate your interaction with <strong>{{ request.requester }}</strong>:</label>
-                                    </div>
-                                    <input type="hidden" name="primary_key" value="{{ request.pk }}">
-                                    <button value="positive_feedback" name="positive_feedback" type="submit" class="btn btn-link" style="background: #48ad76; color: #F9F8F8;"><i class="fas fa-thumbs-up"></i> Positive</button>
-                                    <button value="negative_feedback" name="negative_feedback" type="submit" class="btn btn-link" style="background: #f44336; color: #F9F8F8;"><i class="fas fa-thumbs-down"></i> Negative</button>
-                                </form>
-                            </div>
-                        {% elif request.accepter_rated_positive == True %}
-                            <p><strong>Feedback on {{ request.accepter }}: </strong>Positive </p>
-                        {% else %}
-                            <p><strong>Feedback on {{ request.accepter }}: </strong>Negative </p>
+        <h4> You created the following Requests (Completed)</h4>
+        <hr class="my-4">
+        <div class="row">
+            {% for request in created_requests %}
+                <div class="col-sm-4 col-md-r">
+                    <div class="thumbnail">
+                        {% if request.type == 'Furniture Service' %}
+                            <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/furniture_request_default_image.jpg" alt="furniture_request_default_image.jpg">
+                        {% elif request.type == 'Food Service' %}
+                            <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/food_request_default_image.jpg" alt="food_request_default_image.jpg">
+                        {% elif request.type == 'Clothing Service' %}
+                            <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/clothing_request_default_image.jpg" alt="clothing_request_default_image.jpg">
+                        {% elif request.type == 'Interpreter Service' %}
+                            <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/interpreter_request_default_image.png" alt="interpreter_request_default_image.jpg">
+                        {% elif request.type == 'Transportation Service' %}
+                            <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/transportation_request_default_image.jpg" alt="transportation_request_default_image.jpg">
                         {% endif %}
+
+                        <div class="caption">
+                            <h3><strong>Status: </strong>{{ request.status }}</h3>
+                            <p><strong>Type: </strong>{{ request.type }}</p>
+                            <p><strong>Requested By: </strong>{{ request.requester }}</p>
+                            <p><strong>Description: </strong>{{ request.description }}</p>
+                            <p><strong>Created On: </strong>{{ request.date_created|date:"F d, Y" }}</p>
+                            <p><strong>Accepted By: </strong>{{ request.accepter }}</p>
+                            <p><strong>Appointment Date: </strong>{{ request.date_appointment }}</p>
+                            <p><strong>Completed On: </strong>{{ request.date_completed|date:"F d, Y" }}</p>
+
+                            {% if request.accepter_rated_positive == null %}
+                                <div class="empty-form">
+                                    <form action = "{% url 'past_requests' %}" method="POST" class="form" id="feedback">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="request_type">Rate your interaction with <strong>{{ request.accepter }}</strong>:</label>
+                                        </div>
+                                        <input type="hidden" name="primary_key" value="{{ request.pk }}">
+                                        <button value="positive_feedback" name="positive_feedback" type="submit" class="btn btn-link" style="background: #48ad76; color: #F9F8F8;"><i class="fas fa-thumbs-up"></i> Positive</button>
+                                        <button value="negative_feedback" name="negative_feedback" type="submit" class="btn btn-link" style="background: #f44336; color: #F9F8F8;"><i class="fas fa-thumbs-down"></i> Negative</button>
+                                    </form>
+                                </div>
+                            {% elif request.accepter_rated_positive == True %}
+                                <p><strong>Feedback on {{ request.accepter }}: </strong>Positive </p>
+                            {% else %}
+                                <p><strong>Feedback on {{ request.accepter }}: </strong>Negative </p>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
-    </div>
+            {% endfor %}
+        </div>
     {% elif user.profile.is_organization == False %}
-    <h4> You have not created any past Service Requests. </h4>
-    <hr class="my-4">
+        <h4> You have not created any past Service Requests. </h4>
+        <hr class="my-4">
     {% endif %}
 
     <hr class="my-4">
     {% if accepted_requests.count > 0 %}
-    <h4> You have accepted the following Requests (Completed)</h4>
-    <hr class="my-4">
+        <h4> You have accepted the following Requests (Completed)</h4>
+        <hr class="my-4">
         <div class="row">
-        {% for request in accepted_requests %}
-            <div class="col-sm-4 col-md-r">
-                <div class="thumbnail">
-                    {% if request.type == 'Furniture Service' %}
-                    <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/furniture_request_default_image.jpg" alt="furniture_request_default_image.jpg">
-                    {% elif request.type == 'Food Service' %}
-                    <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/food_request_default_image.jpg" alt="food_request_default_image.jpg">
-                    {% elif request.type == 'Clothing Service' %}
-                    <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/clothing_request_default_image.jpg" alt="clothing_request_default_image.jpg">
-                    {% elif request.type == 'Interpreter Service' %}
-                    <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/interpreter_request_default_image.png" alt="interpreter_request_default_image.jpg">
-                    {% elif request.type == 'Transportation Service' %}
-                    <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/transportation_request_default_image.jpg" alt="transportation_request_default_image.jpg">
-                    {% endif %}
-
-                    <div class="caption">
-                        <h3><strong>Status: </strong>{{ request.status }}</h3>
-                        <p><strong>Type: </strong>{{ request.type }}</p>
-                        <p><strong>Requested By: </strong>{{ request.requester }}</p>
-                        <p><strong>Description: </strong>{{ request.description }}</p>
-                        <p><strong>Created On: </strong>{{ request.date_created|date:"F d, Y" }}</p>
-                        <p><strong>Accepted By: </strong>{{ request.accepter }}</p>
-                        <p><strong>Appointment Date: </strong>{{ request.date_appointment }}</p>
-                        <p><strong>Completed On: </strong>{{ request.date_completed|date:"F d, Y" }}</p>
-
-                        {% if request.requester_rated_positive == null %}
-                            <div class="empty-form">
-                                <form action = "{% url 'past_requests' %}" method="POST" class="form" id="feedback">
-                                    {% csrf_token %}
-                                    <div class="form-group">
-                                        <label for="request_type">Rate your interaction with <strong>{{ request.requester }}</strong>:</label>
-                                    </div>
-                                    <input type="hidden" name="primary_key" value="{{ request.pk }}">
-                                    <button value="positive_feedback" name="positive_feedback" type="submit" class="btn btn-link" style="background: #48ad76; color: #F9F8F8;"><i class="fas fa-thumbs-up"></i> Positive</button>
-                                    <button value="negative_feedback" name="negative_feedback" type="submit" class="btn btn-link" style="background: #f44336; color: #F9F8F8;"><i class="fas fa-thumbs-down"></i> Negative</button>
-                                </form>
-                            </div>
-                        {% elif request.requester_rated_positive == True %}
-                            <p><strong>Feedback on {{ request.requester }}: </strong>Positive</p>
-                        {% else %}
-                            <p><strong>Feedback on {{ request.requester }}: </strong>Negative</p>
+            {% for request in accepted_requests %}
+                <div class="col-sm-4 col-md-r">
+                    <div class="thumbnail">
+                        {% if request.type == 'Furniture Service' %}
+                            <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/furniture_request_default_image.jpg" alt="furniture_request_default_image.jpg">
+                        {% elif request.type == 'Food Service' %}
+                            <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/food_request_default_image.jpg" alt="food_request_default_image.jpg">
+                        {% elif request.type == 'Clothing Service' %}
+                            <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/clothing_request_default_image.jpg" alt="clothing_request_default_image.jpg">
+                        {% elif request.type == 'Interpreter Service' %}
+                            <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/interpreter_request_default_image.png" alt="interpreter_request_default_image.jpg">
+                        {% elif request.type == 'Transportation Service' %}
+                            <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/transportation_request_default_image.jpg" alt="transportation_request_default_image.jpg">
                         {% endif %}
+
+                        <div class="caption">
+                            <h3><strong>Status: </strong>{{ request.status }}</h3>
+                            <p><strong>Type: </strong>{{ request.type }}</p>
+                            <p><strong>Requested By: </strong>{{ request.requester }}</p>
+                            <p><strong>Description: </strong>{{ request.description }}</p>
+                            <p><strong>Created On: </strong>{{ request.date_created|date:"F d, Y" }}</p>
+                            <p><strong>Accepted By: </strong>{{ request.accepter }}</p>
+                            <p><strong>Appointment Date: </strong>{{ request.date_appointment }}</p>
+                            <p><strong>Completed On: </strong>{{ request.date_completed|date:"F d, Y" }}</p>
+
+                            {% if request.requester_rated_positive == null %}
+                                <div class="empty-form">
+                                    <form action = "{% url 'past_requests' %}" method="POST" class="form" id="feedback">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="request_type">Rate your interaction with <strong>{{ request.requester }}</strong>:</label>
+                                        </div>
+                                        <input type="hidden" name="primary_key" value="{{ request.pk }}">
+                                        <button value="positive_feedback" name="positive_feedback" type="submit" class="btn btn-link" style="background: #48ad76; color: #F9F8F8;"><i class="fas fa-thumbs-up"></i> Positive</button>
+                                        <button value="negative_feedback" name="negative_feedback" type="submit" class="btn btn-link" style="background: #f44336; color: #F9F8F8;"><i class="fas fa-thumbs-down"></i> Negative</button>
+                                    </form>
+                                </div>
+                            {% elif request.requester_rated_positive == True %}
+                                <p><strong>Feedback on {{ request.requester }}: </strong>Positive</p>
+                            {% else %}
+                                <p><strong>Feedback on {{ request.requester }}: </strong>Negative</p>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
         </div>
     {% else %}
-    <h4> You have not completed any Requests. </h4>
-    <hr class="my-4">
+        <h4> You have not completed any Requests. </h4>
+        <hr class="my-4">
     {% endif %}
 
 {% endblock content %}
