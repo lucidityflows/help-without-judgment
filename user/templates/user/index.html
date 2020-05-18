@@ -12,147 +12,152 @@
 {% block content %}
 
     {% if created_requests.count > 0 %}
-    <h4> You have created the following Requests </h4>
-    <hr class="my-4">
-    <div class="row">
-        {% for request in created_requests %}
+        <h4> You have created the following Requests </h4>
+        <hr class="my-4">
+        <div class="row">
+            {% for request in created_requests %}
 
-            <div class="col-sm-4 col-md-r">
-                <div class="thumbnail"><br>
-                    {% if request.type == 'Furniture Service' %}
-                        <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/furniture_request_default_image.jpg" alt="furniture_request_default_image.jpg">
+                <div class="col-sm-4 col-md-r">
+                    <div class="thumbnail"><br>
+                        {% if request.type == 'Furniture Service' %}
+                            <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/furniture_request_default_image.jpg" alt="furniture_request_default_image.jpg">
                         {% elif request.type == 'Food Service' %}
-                        <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/food_request_default_image.jpg" alt="food_request_default_image.jpg">
+                            <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/food_request_default_image.jpg" alt="food_request_default_image.jpg">
                         {% elif request.type == 'Clothing Service' %}
-                        <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/clothing_request_default_image.jpg" alt="clothing_request_default_image.jpg">
+                            <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/clothing_request_default_image.jpg" alt="clothing_request_default_image.jpg">
                         {% elif request.type == 'Interpreter Service' %}
-                        <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/interpreter_request_default_image.png" alt="interpreter_request_default_image.jpg">
+                            <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/interpreter_request_default_image.png" alt="interpreter_request_default_image.jpg">
                         {% elif request.type == 'Transportation Service' %}
-                        <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/transportation_request_default_image.jpg" alt="transportation_request_default_image.jpg">
-                    {% endif %}
-
-                    <div class="caption">
-                        <h3><strong>Status: </strong>{{ request.status }}</h3>
-                        <p><strong>Type: </strong>{{ request.type }}</p>
-                        <p><strong>Description: </strong>{{ request.description }}</p>
-                        <p><strong>Created On: </strong>{{ request.date_created|date:"F d, Y" }}</p>
-                    {% if request.accepter_is_verified %}
-                        <p><strong>Accepted By: </strong>{{ request.accepter }} <strong><span style="color: #1C437F"><i class="fas fa-star"></i> Trusted User</span></strong></p>
-                    {% else %}
-                        <p><strong>Accepted By: </strong>{{ request.accepter }}</p>
-                    {% endif %}
-
-                        {% if request.appointment_confirmed == True %}
-                            <p><strong>Appointment: </strong>{{ request.date_appointment }} (Confirmed)</p>
-
-                        {% elif request.status != "Incomplete" and request.appointment_suggested == False%}
-                            <p><strong>Appointment: </strong>{{ request.accepter }} has not suggested an appointment.</p>
-
-                        {% elif request.status == "Incomplete"%}
-                            <p><strong>Appointment: </strong> Your request is still awaiting an accepter.</p>
+                            <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/transportation_request_default_image.jpg" alt="transportation_request_default_image.jpg">
                         {% endif %}
 
-                        <form action= "{% url 'index' %}" method="POST" class="form" id="user_is_requester">
-                            {% csrf_token %}
-                            <input type="hidden" name="primary_key" value="{{ request.pk }}">
-                            <div class="form-group">
-                                {% if request.appointment_suggested == True and request.appointment_confirmed == False %}
-                                    <p>{{ request.accepter }} has suggested an appointment to complete your request.</p>
-                                    <p style="text-align: center;"><strong>Please Accept or Reject this an appointment at: {{ request.date_appointment }}</strong></p>
-                                    <button value="accept" name="accept" type="submit" class="btn btn-link" id="accept" style="background: #48ad76; color: #F9F8F8;"><i class="far fa-calendar-check"></i> Accept</button>
-                                    <button value="reject" name="reject" type="submit" class="btn btn-link" id="reject" style="background: #c69d3e; color: #F9F8F8;"><i class="far fa-calendar-minus"></i> Reject</button>
-                                {% endif %}
-                                {% if request.appointment_confirmed == True %}
-                                    <button value="cancel_appointment" name="cancel_appointment" type="submit" class="btn btn-link" id="cancel_appointment" style="background: #40a9cf; color: #F9F8F8;"><i class="far fa-calendar-minus"></i> Cancel Appointment</button>
-                                {% endif %}
-                            </div>
-                            <div class="form-group">
-                                {% if request.accepter != none %}
-                                    <button value="message" name="message" type="submit" class="btn btn-link" id="message" style="background: #1a2a67; color: #F9F8F8;"><i class="far fa-envelope"> Message</i></button>
-                                {% endif %}
+                        <div class="caption">
+                            <h3><strong>Status: </strong>{{ request.status }}</h3>
+                            <p><strong>Type: </strong>{{ request.type }}</p>
+                            <p><strong>Description: </strong>{{ request.description }}</p>
+                            <p><strong>Created On: </strong>{{ request.date_created|date:"F d, Y" }}</p>
+                            {% if request.accepter_is_verified %}
+                                <p><strong>Accepted By: </strong>{{ request.accepter }} <strong><span style="color: #1C437F"><i class="fas fa-star"></i> Trusted User</span></strong></p>
+                            {% else %}
+                                <p><strong>Accepted By: </strong>{{ request.accepter }}</p>
+                            {% endif %}
 
-                                {% if request.status != "Incomplete" %}
-                                    <button value="cancel" name="cancel" type="submit" class="btn btn-link" id="cancel" style="background: #c69d3e; color: #F9F8F8;"><i class="fas fa-window-close"></i> Cancel</button>
-                                {% endif %}
-                                <button value="delete" name="delete" type="submit" class="btn btn-link" id="delete" style="background: #f44336; color: #F9F8F8;"><i class="fas fa-trash-alt"></i> Delete</button>
-                                {% if request.appointment_confirmed == True %}
-                                    <div class="col-md-offset-2">
-                                        <p style="text-align: center;"><br><button value="complete" name="complete" type="submit" class="btn btn-link" id="complete" style="background: #48ad76; color: #F9F8F8;"><i class="fas fa-check-square"></i> My Request is Complete!</button></p>
-                                    </div>
-                                {% endif %}
-                            </div>
-                        </form>
+                            {% if request.appointment_confirmed == True %}
+                                <p><strong>Appointment: </strong>{{ request.date_appointment }} (Confirmed)</p>
+
+                            {% elif request.status != "Incomplete" and request.appointment_suggested == False%}
+                                <p><strong>Appointment: </strong>{{ request.accepter }} has not suggested an appointment.</p>
+
+                            {% elif request.status == "Incomplete"%}
+                                <p><strong>Appointment: </strong> Your request is still awaiting an accepter.</p>
+                            {% endif %}
+
+                            <form action= "{% url 'index' %}" method="POST" class="form" id="user_is_requester">
+                                {% csrf_token %}
+                                <input type="hidden" name="primary_key" value="{{ request.pk }}">
+                                <div class="form-group">
+                                    {% if request.appointment_suggested == True and request.appointment_confirmed == False %}
+                                        <p>{{ request.accepter }} has suggested an appointment to complete your request.</p>
+                                        <p style="text-align: center;"><strong>Please Accept or Reject this an appointment at: {{ request.date_appointment }}</strong></p>
+                                        <button value="accept" name="accept" type="submit" class="btn btn-link" id="accept" style="background: #48ad76; color: #F9F8F8;"><i class="far fa-calendar-check"></i> Accept</button>
+                                        <button value="reject" name="reject" type="submit" class="btn btn-link" id="reject" style="background: #c69d3e; color: #F9F8F8;"><i class="far fa-calendar-minus"></i> Reject</button>
+                                    {% endif %}
+                                    {% if request.appointment_confirmed == True %}
+                                        <button value="cancel_appointment" name="cancel_appointment" type="submit" class="btn btn-link" id="cancel_appointment" style="background: #40a9cf; color: #F9F8F8;"><i class="far fa-calendar-minus"></i> Cancel Appointment</button>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    {% if request.accepter != none %}
+                                        <button value="message" name="message" type="submit" class="btn btn-link" id="message" style="background: #1a2a67; color: #F9F8F8;"><i class="far fa-envelope"> Message</i></button>
+                                    {% endif %}
+
+                                    {% if request.status != "Incomplete" %}
+                                        <button value="cancel" name="cancel" type="submit" class="btn btn-link" id="cancel" style="background: #c69d3e; color: #F9F8F8;"><i class="fas fa-window-close"></i> Cancel</button>
+                                    {% endif %}
+                                    <button value="delete" name="delete" type="submit" class="btn btn-link" id="delete" style="background: #f44336; color: #F9F8F8;"><i class="fas fa-trash-alt"></i> Delete</button>
+                                    {% if request.appointment_confirmed == True %}
+                                        <div class="col-md-offset-2">
+                                            <p style="text-align: center;"><br><button value="complete" name="complete" type="submit" class="btn btn-link" id="complete" style="background: #48ad76; color: #F9F8F8;"><i class="fas fa-check-square"></i> My Request is Complete!</button></p>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
-    </div>
+            {% endfor %}
+        </div>
     {% elif user.profile.is_organization == False %}
-    <h4> You do not have any open requests. </h4>
-    <hr class="my-4">
+        <h4> You do not have any open requests. </h4>
+        <hr class="my-4">
     {% endif %}
 
     <hr class="my-4">
     {% if accepted_requests.count > 0 %}
-    <h4> You have accepted the following Requests </h4>
-    <hr class="my-4">
-    <div class="row">
-        {% for request in accepted_requests %}
-            <div class="col-sm-4 col-md-r">
-                <div class="thumbnail"><br>
-                    {% if request.type == 'Furniture Service' %}
-                        <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/furniture_request_default_image.jpg" alt="furniture_request_default_image.jpg">
+        <h4> You have accepted the following Requests </h4>
+        <hr class="my-4">
+        <div class="row">
+            {% for request in accepted_requests %}
+                <div class="col-sm-4 col-md-r">
+                    <div class="thumbnail"><br>
+                        {% if request.type == 'Furniture Service' %}
+                            <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/furniture_request_default_image.jpg" alt="furniture_request_default_image.jpg">
                         {% elif request.type == 'Food Service' %}
-                        <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/food_request_default_image.jpg" alt="food_request_default_image.jpg">
+                            <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/food_request_default_image.jpg" alt="food_request_default_image.jpg">
                         {% elif request.type == 'Clothing Service' %}
-                        <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/clothing_request_default_image.jpg" alt="clothing_request_default_image.jpg">
+                            <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/clothing_request_default_image.jpg" alt="clothing_request_default_image.jpg">
                         {% elif request.type == 'Interpreter Service' %}
-                        <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/interpreter_request_default_image.png" alt="interpreter_request_default_image.jpg">
+                            <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/interpreter_request_default_image.png" alt="interpreter_request_default_image.jpg">
                         {% elif request.type == 'Transportation Service' %}
-                        <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/transportation_request_default_image.jpg" alt="transportation_request_default_image.jpg">
-                    {% endif %}
-
-                    <div class="caption">
-                        <h3><strong>Status: </strong>{{ request.status }}</h3>
-                        <p><strong>Type: </strong>{{ request.type }}</p>
-                        <p><strong>Description: </strong>{{ request.description }}</p>
-                        <p><strong>Created On: </strong>{{ request.date_created|date:"F d, Y" }}</p>
-                        <p><strong>Requested By: {{ request.requester }}</strong></p>
-
-                        {% if request.appointment_confirmed == True %}
-                            <p><strong>Appointment: </strong>{{ request.date_appointment }} (Confirmed)</p>
-                        {% elif request.appointment_suggested == True and request.appointment_confirmed == False %}
-                            <p><strong>Appointment: </strong>{{ request.date_appointment }} (Awaiting Request Confirmation)</p>
+                            <img style="border: 2px solid black;" class="card-img" src="../static/registration/images/transportation_request_default_image.jpg" alt="transportation_request_default_image.jpg">
                         {% endif %}
 
-                        <form action= "{% url 'index' %}" method="POST" class="form" id="user_is_accepter">
-                            {% csrf_token %}
-                            <input type="hidden" name="primary_key" value="{{ request.pk }}">
-                            <div class="form-group">
-                            {% if request.appointment_suggested == False %}
-                                <label for="date_appointment">Schedule Appointment: </label>
-                                <input size="15px" type="text" id="id_date" name="new_date">
-                                <button value="schedule" name="schedule" type="submit" class="btn btn-link" style="background: #40a9cf; color: #F9F8F8;"><i class="far fa-calendar-plus"></i></i> Schedule</button>
+                        <div class="caption">
+                            <h3><strong>Status: </strong>{{ request.status }}</h3>
+                            <p><strong>Type: </strong>{{ request.type }}</p>
+                            <p><strong>Description: </strong>{{ request.description }}</p>
+                            <p><strong>Created On: </strong>{{ request.date_created|date:"F d, Y" }}</p>
+                            <p><strong>Requested By: {{ request.requester }}</strong></p>
+
+                            {% if request.appointment_confirmed == True %}
+                                <p><strong>Appointment: </strong>{{ request.date_appointment }} (Confirmed)</p>
+                            {% elif request.appointment_suggested == True and request.appointment_confirmed == False %}
+                                <p><strong>Appointment: </strong>{{ request.date_appointment }} (Awaiting Request Confirmation)</p>
                             {% endif %}
 
-                            {% if request.appointment_confirmed == True%}
-                                <button value="cancel_appointment" name="cancel_appointment" type="submit" class="btn btn-link" id="cancel_appointment" style="background: #40a9cf; color: #F9F8F8;"><i class="far fa-calendar-minus"></i> Cancel Appointment</button>
-                            {% endif %}
-                            </div>
-                            <div class="form-group">
-                                <button value="message" name="message" type="submit" class="btn btn-link" style="background: #1a2a67; color: #F9F8F8;"><i class="far fa-envelope"></i> Message</button>
-                                <button value="cancel" name="cancel" type="submit" class="btn btn-link" style="background: #c69d3e; color: #F9F8F8;"><i class="fas fa-window-close"></i> Cancel</button>
-                                <button value="report" name="report" type="submit" class="btn btn-link" style="background: #f44336; color: #F9F8F8;"><i class="fas fa-flag"></i> Report</button>
-                            </div>
-                        </form>
+
+
+
+                            <form action= "{% url 'index' %}" method="POST" class="form" id="user_is_accepter">
+                                {% csrf_token %}
+                                <input type="hidden" name="primary_key" value="{{ request.pk }}">
+                                <div class="form-group">
+                                    {% if request.appointment_suggested == False %}
+
+                                        <label for="date_appointment">Schedule Appointment: </label>
+                                        <input size="15px" type="text" id="id_date" class="datetimepicker" name="new_date">
+                                        <button value="schedule" name="schedule" type="submit" class="btn btn-link" style="background: #40a9cf; color: #F9F8F8;"><i class="far fa-calendar-plus"></i></i> Schedule</button>
+
+                                    {% endif %}
+
+                                    {% if request.appointment_confirmed == True%}
+                                        <button value="cancel_appointment" name="cancel_appointment" type="submit" class="btn btn-link" id="cancel_appointment" style="background: #40a9cf; color: #F9F8F8;"><i class="far fa-calendar-minus"></i> Cancel Appointment</button>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <button value="message" name="message" type="submit" class="btn btn-link" style="background: #1a2a67; color: #F9F8F8;"><i class="far fa-envelope"></i> Message</button>
+                                    <button value="cancel" name="cancel" type="submit" class="btn btn-link" style="background: #c69d3e; color: #F9F8F8;"><i class="fas fa-window-close"></i> Cancel</button>
+                                    <button value="report" name="report" type="submit" class="btn btn-link" style="background: #f44336; color: #F9F8F8;"><i class="fas fa-flag"></i> Report</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
-    </div>
+            {% endfor %}
+        </div>
     {% else %}
-    <h4> You have not accepted any open Requests.</h4>
-    <hr class="my-4">
+        <h4> You have not accepted any open Requests.</h4>
+        <hr class="my-4">
     {% endif %}
 
 {% endblock content %}
