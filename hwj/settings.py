@@ -26,9 +26,7 @@ SECRET_KEY = 'y(zrdj91=3sqam5mm#)9f2f9-i_dz-%wezg@rei&lnr*40ynom'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.helpwithoutjudgment.ga', '159.203.72.81',
-                 'www.helpwithoutjudgment.ga', '127.0.0.1', '127.0.0.1:8000',
-                 'localhost:8000', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', '127.0.0.1:8000', 'localhost']
 
 
 # Application definition
