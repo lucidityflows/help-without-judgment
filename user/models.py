@@ -6,8 +6,9 @@ from django.utils import timezone
 from PIL import Image
 
 
-# REQUEST_TYPES = types of volunteering requests that the user will be able to choose. Every requests must be associated
-#                 with one of these types.
+# Create your models here.
+
+
 REQUEST_TYPES = [
     ('Furniture Service', 'Furniture Service'),
     ('Interpreter Service', 'Interpreter Service'),
@@ -16,28 +17,11 @@ REQUEST_TYPES = [
     ('Food Service', 'Food Service'),
 ]
 
-# FEEDBACK_TYPES = types of feedback that can be left at the conclusion of a service request. 'None' is the default
-#                  value until feedback has been left at the completion of a service requests.
 FEEDBACK_TYPES = [
     ('None', 'None'),
     ('Positive', 'Positive'),
     ('Negative', 'Negative'),
 ]
-
-# SUPPORT_TICKET_STATUS = indicates the status of a Support Ticket. 'Pending' is the default status, until an moderator
-#                         or admin addresses to Support Ticket.
-SUPPORT_TICKET_STATUS = [
-    ('p', 'Pending'),
-    ('i', 'In-Progress'),
-    ('c', 'Closed'),
-]
-
-# Model Name: Requests
-# Description: The Requests model represents a volunteer request which is created by a User who is the Requester and
-#              fulfilled by a different User who is the Accepter. As the Request goes through its lifecycle (created,
-#              , accepted, pending appointment, completed), it is updated to reflect its current status. When it is
-#              completed, and the other user is rated by feedback, it should not undergo any other updates. Completed
-#              Request information is viewable to the Accepter and Requester.
 
 
 class Requests(models.Model):
@@ -119,9 +103,12 @@ class DateForm(forms.Form):
 
     date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M', ''], required=False)
 
-# Model Name: SupportTicket
-# Description: The SupportTicket model represents a User generated request for moderator or admin user to assist with
-#              an issue the User is experiencing.
+
+SUPPORT_TICKET_STATUS = [
+    ('p', 'Pending'),
+    ('i', 'In-Progress'),
+    ('c', 'Closed'),
+]
 
 
 class SupportTicket(models.Model):
@@ -131,7 +118,7 @@ class SupportTicket(models.Model):
     body = models.CharField(max_length=500)
     date_created = models.DateField(auto_now_add=True)
     status = models.CharField(max_length=1, choices=SUPPORT_TICKET_STATUS, default='p')
-    support_comment = models.CharField(max_length=200, default="Your issue is being processed. Check for updates later.")
+    support_comment = models.CharField(max_length=200, default="This issue is still being processed. Check for updates later.")
 
     def __str__(self):
 
@@ -144,12 +131,6 @@ class SupportTicketForm(ModelForm):
         model = SupportTicket
         fields = ['subject', 'body']
         widgets = {'body': forms.Textarea}
-
-# Model Name: Profile
-# Description: The Profile model represents a User Profile. It stores information about a User's profile image,
-#              whether or not they have moderator status, if they are an individual or organization, and the historical
-#              counts on their user stats. This information will be used to create graphs for the user to view, and
-#              to export in the public API.
 
 
 class Profile(models.Model):

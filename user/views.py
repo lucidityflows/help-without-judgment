@@ -387,8 +387,8 @@ def inbox(request):
 
     else:
 
-        message_thread_list_1 = Thread.objects.filter(first=user).order_by("updated")
-        message_thread_list_2 = Thread.objects.filter(second=user).order_by("updated")
+        message_thread_list_1 = Thread.objects.filter(first=user)
+        message_thread_list_2 = Thread.objects.filter(second=user)
 
         message_list = message_thread_list_1 | message_thread_list_2
 

@@ -125,19 +125,14 @@
                             <p><strong>Appointment: </strong>{{ request.date_appointment }} (Awaiting Request Confirmation)</p>
                         {% endif %}
 
-
-
-
                         <form action= "{% url 'index' %}" method="POST" class="form" id="user_is_accepter">
                             {% csrf_token %}
                             <input type="hidden" name="primary_key" value="{{ request.pk }}">
                             <div class="form-group">
                             {% if request.appointment_suggested == False %}
-
                                 <label for="date_appointment">Schedule Appointment: </label>
-                                <input size="15px" type="text" id="id_date" class="datetimepicker" name="new_date">
+                                <input size="15px" type="text" id="id_date" name="new_date">
                                 <button value="schedule" name="schedule" type="submit" class="btn btn-link" style="background: #40a9cf; color: #F9F8F8;"><i class="far fa-calendar-plus"></i></i> Schedule</button>
-
                             {% endif %}
 
                             {% if request.appointment_confirmed == True%}
